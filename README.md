@@ -1,5 +1,5 @@
 # A1-02
-Inteligent systems practices
+Intelligent systems practices
 
 Group formed by:
 Elena Hervás Martín
