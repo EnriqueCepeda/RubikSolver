@@ -2,19 +2,27 @@ import json
 import hashlib
 from numpy import array, rot90, nditer, copy
 from math import sqrt
+from os import path
+from sys import exit
  
 class Cube:
     def __init__(self,json_file):
 
-        with open(json_file, 'r') as f:
-            cube_configuration = json.load(f)
-        self.left = array(cube_configuration['LEFT'],dtype='int8')
-        self.right= array(cube_configuration['RIGHT'],dtype='int8')
-        self.up= array(cube_configuration['UP'],dtype='int8')
-        self.down= array(cube_configuration['DOWN'],dtype='int8')
-        self.back= array(cube_configuration['BACK'],dtype='int8')
-        self.front= array(cube_configuration['FRONT'],dtype='int8')
-        self.n = int(sqrt(self.left.size))
+        try:
+            with open(path.join(json_file), 'r') as f:
+                cube_configuration = json.load(f)
+        except FileNotFoundError as e:
+            print(e)
+            exit()
+
+        else:
+            self.left = array(cube_configuration['LEFT'],dtype='int8')
+            self.right= array(cube_configuration['RIGHT'],dtype='int8')
+            self.up= array(cube_configuration['UP'],dtype='int8')
+            self.down= array(cube_configuration['DOWN'],dtype='int8')
+            self.back= array(cube_configuration['BACK'],dtype='int8')
+            self.front= array(cube_configuration['FRONT'],dtype='int8')
+            self.n = int(sqrt(self.left.size))
     
     def create_md5(self):
         string=''
@@ -34,7 +42,11 @@ class Cube:
         hash = hashlib.md5(string.encode())
         return hash.hexdigest()
 
+    
     def moveL(self,*args):
+        """
+        This function does the L and l axis moves
+        """
 
         axis = args[0]
         axis_depth = args[1]
@@ -76,12 +88,17 @@ class Cube:
 
         axis = movement[:1]
         axis_depth = int(movement[1:])
-        if axis.lower() == 'l':
-            self.moveL(axis,axis_depth)
-        elif axis.lower() == 'd':
-            self.moveD(axis,axis_depth)
+
+        if axis_depth < self.n - 1:
+
+            if axis.lower() == 'l':
+                self.moveL(axis,axis_depth)
+            elif axis.lower() == 'd':
+                self.moveD(axis,axis_depth)
+            else:
+                self.moveB(axis,axis_depth)
         else:
-            self.moveB(axis,axis_depth)
+            print("introduce a valid movement")
 
         
 
@@ -93,7 +110,7 @@ print(x.down)
 print(x.back)
 print(x.up)
 print(x.left)
-x.move('l1')
+x.move('l5')
 print('')
 print(x.front)
 print(x.down)
