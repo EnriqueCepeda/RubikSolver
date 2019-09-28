@@ -58,14 +58,10 @@ class Cube:
 
             self.down[:,axis_depth] = aux_back
             self.back[:,axis_depth] = self.up[:,self.n - 1 - axis_depth]
-            self.up[:,self.n - 1 - axis_depth] = aux_front
+            self.up[:,self.n - 1 - axis_depth] = flip(aux_front)
             self.front[:,axis_depth] = aux_down
 
-            if axis_depth == 0:
-                self.left = rot90(self.left,1)
-            elif axis_depth == self.n-1:
-                self.right = rot90(self.right,1)
-
+            self.left = rot90(self.left,1)
         else:
             
             aux_up = self.up[:,self.n - 1 - axis_depth].copy()
@@ -76,15 +72,48 @@ class Cube:
             self.back[:,axis_depth] = aux_down
             self.up[:,self.n - 1 - axis_depth] = aux_back
             self.front[:,axis_depth] = aux_up
-            
-            if axis_depth == 0:
-                self.left = rot90(self.left,3)
-            elif axis_depth == self.n-1:
-                self.right = rot90(self.right,3)
+            self.left = rot90(self.left,3)
 
 
     def moveD(self,*args):
-        pass
+        """
+        This function does the D and d axis moves
+        """
+        axis = args[0]
+        axis_depth = args[1]
+        if axis.islower():
+            
+            aux_back = self.back[self.n - 1 - axis_depth,:].copy()
+            aux_right = self.right[:,axis_depth].copy()
+            aux_front = self.front[axis_depth,:].copy()
+            aux_left = self.left[:,self.n - 1 - axis_depth].copy()
+                      
+            self.back[self.n - 1 - axis_depth,:] =aux_right
+            self.right[:,axis_depth] = aux_front
+            self.front[axis_depth,:] = aux_left
+            self.left[:,self.n - 1- axis_depth] = aux_back
+
+            if axis_depth == 0:
+                self.down = rot90(self.down,1)
+            elif axis_depth == self.n-1:
+                self.up = rot90(self.up,1)
+        else:
+
+            aux_back = flip(self.back[self.n - 1 - axis_depth,:].copy())
+            aux_right = flip(self.right[:,axis_depth].copy())
+            aux_front = flip(self.front[axis_depth,:].copy())
+            aux_left = flip(self.left[:,self.n - 1 -axis_depth].copy())
+
+
+            self.back[self.n - 1 - axis_depth,:] = aux_left 
+            self.right[:,axis_depth] = aux_back
+            self.front[axis_depth] = aux_right
+            self.left[:,self.n - 1- axis_depth] = aux_front
+
+            if axis_depth == 0:
+                self.down = rot90(self.down,3)
+            elif axis_depth == self.n-1:
+                self.up = rot90(self.up,3)
     
     def moveB(self,*args):
         """
@@ -148,7 +177,7 @@ print(x.left, '    Left')
 print(x.right,'  Right')
 print(x.up,'   Up')
 
-x.move('b0')
+x.move('d2')
 print('After b0: ')
 print(x.back, '   Back')
 print(x.down, '   Down')
