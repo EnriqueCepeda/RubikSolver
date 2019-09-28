@@ -61,7 +61,11 @@ class Cube:
             self.up[:,self.n - 1 - axis_depth] = aux_front
             self.front[:,axis_depth] = aux_down
 
-            self.left = rot90(self.left,1)
+            if axis_depth == 0:
+                self.left = rot90(self.left,1)
+            elif axis_depth == self.n-1:
+                self.right = rot90(self.right,1)
+
         else:
             
             aux_up = self.up[:,self.n - 1 - axis_depth].copy()
@@ -72,24 +76,58 @@ class Cube:
             self.back[:,axis_depth] = aux_down
             self.up[:,self.n - 1 - axis_depth] = aux_back
             self.front[:,axis_depth] = aux_up
-            self.left = rot90(self.left,3)
+            
+            if axis_depth == 0:
+                self.left = rot90(self.left,3)
+            elif axis_depth == self.n-1:
+                self.right = rot90(self.right,3)
 
-            
-            
-            
 
     def moveD(self,*args):
         pass
     
     def moveB(self,*args):
-        pass
+        """
+        This function does the B and b axis moves
+        """
+        axis = args[0]
+        axis_depth = args[1]
+
+        if axis.islower():  
+
+            aux_left = self.left[axis_depth,:].copy()
+
+            self.left[axis_depth,:] = self.down[axis_depth,:]
+            self.down[axis_depth,:] = self.right[axis_depth,:]
+            self.right[axis_depth,:] = self.up[axis_depth,:]
+            self.up[axis_depth,:] = aux_left
+
+            if axis_depth == 0:
+                self.back = rot90(self.back,1)
+            elif axis_depth == self.n-1:
+                self.front = rot90(self.front,1)
+
+        else:  
+            
+            aux_left = self.left[axis_depth,:].copy()
+
+            self.left[axis_depth,:] = self.up[axis_depth,:] 
+            self.up[axis_depth,:] = self.right[axis_depth,:]
+            self.right[axis_depth,:] = self.down[axis_depth,:]
+            self.down[axis_depth,:] = aux_left
+
+            if axis_depth == 0:
+                self.back = rot90(self.back,3)
+            elif axis_depth == self.n-1:
+                self.front = rot90(self.front,3)
+
 
     def move(self, movement):
 
         axis = movement[:1]
         axis_depth = int(movement[1:])
 
-        if axis_depth < self.n - 1:
+        if axis_depth < self.n:
 
             if axis.lower() == 'l':
                 self.moveL(axis,axis_depth)
@@ -98,22 +136,24 @@ class Cube:
             else:
                 self.moveB(axis,axis_depth)
         else:
-            print("introduce a valid movement")
+            print("Introduce a valid movement")
 
-        
-
-
+    
 
 x= Cube('../resources/cube.json')
-print(x.front)
-print(x.down)
-print(x.back)
-print(x.up)
-print(x.left)
-x.move('l5')
-print('')
-print(x.front)
-print(x.down)
-print(x.back)
-print(x.up)
-print(x.left)
+print(x.back, '   Back')
+print(x.down, '   Down')
+print(x.front, '    Front')
+print(x.left, '    Left')
+print(x.right,'  Right')
+print(x.up,'   Up')
+
+x.move('b0')
+print('After b0: ')
+print(x.back, '   Back')
+print(x.down, '   Down')
+print(x.front, '    Front')
+print(x.left, '    Left')
+print(x.right,'  Right')
+print(x.up,'   Up')
+
