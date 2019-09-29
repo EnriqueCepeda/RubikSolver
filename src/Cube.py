@@ -1,6 +1,6 @@
 import json
 import hashlib
-from numpy import array, rot90, nditer, copy
+from numpy import array, rot90, nditer, copy, flip
 from math import sqrt
 from os import path
 from sys import exit
