@@ -102,17 +102,13 @@ class Cube:
         """
         axis = args[0]
         axis_depth = args[1]
-
         if axis.islower():
-              
-            aux_back = self.back[self.n - 1 - axis_depth,:].copy()
-            aux_right = self.right[:,axis_depth].copy()
-            aux_front = self.front[axis_depth,:].copy()
-            aux_left = self.left[:,self.n - 1 - axis_depth].copy()
-                      
-            self.back[self.n - 1 - axis_depth,:] =aux_right
-            self.right[:,axis_depth] = aux_front
-            self.front[axis_depth,:] = aux_left
+            
+            aux_back = flip(self.back[self.n - 1 - axis_depth,:].copy())
+                     
+            self.back[self.n - 1 - axis_depth,:] = self.right[:,axis_depth].copy()
+            self.right[:,axis_depth] = flip(self.front[axis_depth,:].copy())
+            self.front[axis_depth,:] = self.left[:,self.n - 1 - axis_depth].copy()
             self.left[:,self.n - 1- axis_depth] = aux_back
 
             if axis_depth == 0:
@@ -121,17 +117,13 @@ class Cube:
                 self.up = rot90(self.up,1)
         else:
 
-            aux_back = flip(self.back[self.n - 1 - axis_depth,:].copy())
-            aux_right = flip(self.right[:,axis_depth].copy())
-            aux_front = flip(self.front[axis_depth,:].copy())
-            aux_left = flip(self.left[:,self.n - 1 -axis_depth].copy())
-
-
-            self.back[self.n - 1 - axis_depth,:] = aux_left 
+            aux_back = self.back[self.n - 1 - axis_depth,:].copy()
+           
+            self.back[self.n - 1 - axis_depth,:] = flip(self.left[:,self.n - 1 -axis_depth].copy())
+            self.left[:,self.n - 1- axis_depth] = self.front[axis_depth,:].copy()
+            self.front[axis_depth,:] = flip(self.right[:,axis_depth].copy())
             self.right[:,axis_depth] = aux_back
-            self.front[axis_depth] = aux_right
-            self.left[:,self.n - 1- axis_depth] = aux_front
-
+            
             if axis_depth == 0:
                 self.down = rot90(self.down,3)
             elif axis_depth == self.n-1:
