@@ -26,7 +26,12 @@ class Cube:
             self.n = int(sqrt(self.left.size))
     
     def __str__(self):
-        return str(self.up) + ' UP \n' + str(self.down) + ' DOWN \n' + str(self.left) + ' LEFT \n' + str(self.right) + ' RIGHT \n' + str(self.front) + ' FRONT \n' + str(self.back) + ' BACK \n' 
+        """This function does the representation of the cube
+        
+        Returns:
+            string -- Returns the different faces of the cube
+        """
+        return str(self.back) + ' BACK \n' + str(self.down) + ' DOWN \n' + str(self.front) + ' FRONT \n' + str(self.left) + ' LEFT \n' + str(self.right) + ' RIGHT \n' + str(self.up) + ' UP \n' 
 
     def create_md5(self):
         """Does an md5 string with the cube configuration
@@ -51,6 +56,12 @@ class Cube:
         hash = hashlib.md5(string.encode())
         return hash.hexdigest()
 
+    def valid_movements(self):
+        """
+        This method returns all the valid movements from a cube of n dimensions
+        """
+        return [letter + str(number) for letter in ['B','b','D','d','L','l'] for number in range(0,self.n)]
+
     
     def moveL(self,*args):
         """
@@ -61,27 +72,28 @@ class Cube:
         axis_depth = args[1]
 
         if axis.islower():
-            aux_front = self.front[:,axis_depth].copy()
             aux_down = self.down[:,axis_depth].copy()
-            aux_back = self.back[:,axis_depth].copy()
-
-            self.down[:,axis_depth] = aux_back
-            self.back[:,axis_depth] = self.up[:,self.n - 1 - axis_depth]
-            self.up[:,self.n - 1 - axis_depth] = flip(aux_front)
+            self.down[:,axis_depth] = self.back[:,axis_depth]
+            self.back[:,axis_depth] = flip(self.up[:,self.n - 1 - axis_depth])
+            self.up[:,self.n - 1 - axis_depth] = flip(self.front[:,axis_depth])
             self.front[:,axis_depth] = aux_down
 
-            self.left = rot90(self.left,1)
+            if axis_depth == 0:
+                self.left = rot90(self.left,1)
+            elif axis_depth == self.n-1:
+                self.right = rot90(self.right,1)
         else:
-            
             aux_up = self.up[:,self.n - 1 - axis_depth].copy()
-            aux_down = self.down[:,axis_depth].copy()
-            aux_back = self.back[:,axis_depth].copy()
-
+            self.up[:,self.n - 1 - axis_depth] = flip(self.back[:,axis_depth])
+            self.back[:,axis_depth] = self.down[:,axis_depth]
             self.down[:,axis_depth] = self.front[:,axis_depth] 
-            self.back[:,axis_depth] = aux_down
-            self.up[:,self.n - 1 - axis_depth] = aux_back
-            self.front[:,axis_depth] = aux_up
-            self.left = rot90(self.left,3)
+            self.front[:,axis_depth] = flip(aux_up)
+
+            if axis_depth == 0:
+                self.left = rot90(self.left,3)
+            elif axis_depth == self.n-1:
+                self.right = rot90(self.right,3)
+
 
 
     def moveD(self,*args):
@@ -90,8 +102,9 @@ class Cube:
         """
         axis = args[0]
         axis_depth = args[1]
+
         if axis.islower():
-            
+              
             aux_back = self.back[self.n - 1 - axis_depth,:].copy()
             aux_right = self.right[:,axis_depth].copy()
             aux_front = self.front[axis_depth,:].copy()
@@ -178,10 +191,11 @@ class Cube:
 
    
 
-    
 
 x= Cube('../resources/cube.json')
+print(x.valid_movements())
 print(x)
-x.move('l2')
+x.move('L2')
 print('After b0: ')
+print(x)
 
