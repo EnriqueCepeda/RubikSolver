@@ -6,6 +6,7 @@ from os import path
 from sys import exit
  
 class Cube:
+
     def __init__(self,json_file):
 
         try:
@@ -24,7 +25,15 @@ class Cube:
             self.front= array(cube_configuration['FRONT'],dtype='int8')
             self.n = int(sqrt(self.left.size))
     
+    def __str__(self):
+        return str(self.up) + ' UP \n' + str(self.down) + ' DOWN \n' + str(self.left) + ' LEFT \n' + str(self.right) + ' RIGHT \n' + str(self.front) + ' FRONT \n' + str(self.back) + ' BACK \n' 
+
     def create_md5(self):
+        """Does an md5 string with the cube configuration
+        
+        Returns:
+            string -- returns the identifier of the cube state which depends of the colors combination
+        """
         string=''
         for number in nditer(self.back):
             string += str(number)
@@ -167,22 +176,12 @@ class Cube:
         else:
             print("Introduce a valid movement")
 
+   
+
     
 
 x= Cube('../resources/cube.json')
-print(x.back, '   Back')
-print(x.down, '   Down')
-print(x.front, '    Front')
-print(x.left, '    Left')
-print(x.right,'  Right')
-print(x.up,'   Up')
-
-x.move('d2')
+print(x)
+x.move('l2')
 print('After b0: ')
-print(x.back, '   Back')
-print(x.down, '   Down')
-print(x.front, '    Front')
-print(x.left, '    Left')
-print(x.right,'  Right')
-print(x.up,'   Up')
 
