@@ -1,5 +1,7 @@
 import json
 import hashlib
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from numpy import array, rot90, nditer, copy, flip
 from math import sqrt
 from os import path
@@ -33,6 +35,7 @@ class Cube:
             string -- Returns the different faces of the cube
         """
         return str(self.back) + ' BACK \n' + str(self.down) + ' DOWN \n' + str(self.front) + ' FRONT \n' + str(self.left) + ' LEFT \n' + str(self.right) + ' RIGHT \n' + str(self.up) + ' UP \n' 
+
 
     def create_md5(self):
         """Does an md5 string with the cube configuration
@@ -78,6 +81,55 @@ class Cube:
         with open(args[0], 'w') as f:
             json.dump(cube_json, f)
 
+    def save_img(self,name):
+        """This function saves the configuration of the cube  in an .svg image
+        """
+        self.plot_cube().savefig('../resources/'+name, format='svg')  
+
+    def plot_cube(self):
+        """This function plots the matrix of the cube
+        """
+        fig, axs = plt.subplots(3,4)
+
+        self.plot_face(axs[0,1], self.back)
+        axs[0,1].set_title('BACK')
+        self.plot_face(axs[1,1], self.down)
+        axs[1,1].set_title('DOWN')
+        self.plot_face(axs[2,1],  self.front)
+        axs[2,1].set_title('FRONT')
+        self.plot_face(axs[1,0],  self.left)
+        axs[1,0].set_title('LEFT')
+        self.plot_face(axs[1,2],  self.right)
+        axs[1,2].set_title('RIGHT')
+        self.plot_face(axs[1,3],  self.up)
+        axs[1,3].set_title('UP')
+        
+        for ax in axs.flat:
+            ax.axis(False)
+
+        fig.suptitle('cube.svg')
+        plt.autoscale()  
+        plt.show()
+
+        return fig    
+        
+
+    def plot_face(self, ax, face):
+        """This function plots the matrix of a certain face of the cube 
+        """
+        colorlist = ['red', 'blue', 'yellow', 'green', 'orange', 'white']
+
+        y=1-(1/self.n)
+        x=0
+        for row in face:
+            for number in row:
+                square = patches.Rectangle((x,y),1/self.n,1/self.n, linewidth=2,edgecolor='black',facecolor=colorlist[number])
+                ax.add_patch(square)
+                x+=1/self.n
+            x-=1
+            y-=1/self.n
+
+        
     def valid_movements(self):
         """
         This method returns all the valid movements from a cube of n dimensions
@@ -207,10 +259,9 @@ class Cube:
 
 
 x= Cube('../resources/cube.json')
-print(x.valid_movements())
-print(x)
-x.move('L2')
-print(x.to_json("../resources/foo.json"))
+#print(x.valid_movements())
+#print(x)
 
-
-
+#x.move('L2')
+#print(x.to_json("../resources/foo.json"))
+x.save_img('cube.svg')
