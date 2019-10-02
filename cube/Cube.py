@@ -4,6 +4,7 @@ from numpy import array, rot90, nditer, copy, flip
 from math import sqrt
 from os import path
 from sys import exit
+import codecs
  
 class Cube:
 
@@ -55,6 +56,27 @@ class Cube:
         
         hash = hashlib.md5(string.encode())
         return hash.hexdigest()
+
+    def to_json(self,*args):
+        """Generates a json file with cube configuration
+        
+        Arguments:
+            args {
+                args[0] - string - This string tells the method where to store the json file
+
+            } 
+        """
+        cube_json={
+        'BACK' : self.back.tolist(),   
+        'DOWN' :self.down.tolist(),
+        'FRONT' : self.front.tolist(), 
+        'LEFT' : self.left.tolist(), 
+        'RIGHT' : self.right.tolist(), 
+        'UP' : self.up.tolist()
+        }
+
+        with open(args[0], 'w') as f:
+            json.dump(cube_json, f)
 
     def valid_movements(self):
         """
@@ -188,6 +210,7 @@ x= Cube('../resources/cube.json')
 print(x.valid_movements())
 print(x)
 x.move('L2')
-print('After b0: ')
-print(x)
+print(x.to_json("../resources/foo.json"))
+
+
 
