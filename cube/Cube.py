@@ -83,51 +83,64 @@ class Cube:
 
     def save_img(self,name):
         """This function saves the configuration of the cube  in an .svg image
-        """
-        self.plot_cube().savefig('../resources/'+name, format='svg')  
 
-    def plot_cube(self):
-        """This function plots the matrix of the cube
+        Parameters:
+            name - Type: String - Desscription: Is the name of the path where the svg_file is
         """
-        fig, axs = plt.subplots(3,4)
+        self.plot_cube(name).savefig('../resources/'+name, format='svg')  
 
-        self.plot_face(axs[0,1], self.back)
-        axs[0,1].set_title('BACK')
-        self.plot_face(axs[1,1], self.down)
-        axs[1,1].set_title('DOWN')
-        self.plot_face(axs[2,1],  self.front)
-        axs[2,1].set_title('FRONT')
-        self.plot_face(axs[1,0],  self.left)
-        axs[1,0].set_title('LEFT')
-        self.plot_face(axs[1,2],  self.right)
-        axs[1,2].set_title('RIGHT')
-        self.plot_face(axs[1,3],  self.up)
-        axs[1,3].set_title('UP')
+    def plot_cube(self,svg_path):
+        """This function plots the matrix of the cube hiding the axes of each side of the cube
         
-        for ax in axs.flat:
-            ax.axis(False)
+        Parameters: 
+            svg_path - Type: String - Description: Is the path where the svg_file is stored
+        """
+        plot, axes = plt.subplots(3,4)
 
-        fig.suptitle('cube.svg')
+        self.plot_face(axes[0,1], self.back)
+        axes[0,1].set_title('BACK')
+        self.plot_face(axes[1,1], self.down)
+        axes[1,1].set_title('DOWN')
+        self.plot_face(axes[2,1],  self.front)
+        axes[2,1].set_title('FRONT')
+        self.plot_face(axes[1,0],  self.left)
+        axes[1,0].set_title('LEFT')
+        self.plot_face(axes[1,2],  self.right)
+        axes[1,2].set_title('RIGHT')
+        self.plot_face(axes[1,3],  self.up)
+        axes[1,3].set_title('UP')
+        
+        for axis in axes.flat:
+            axis.axis(False)
+
+        plot.suptitle(svg_path)
         plt.autoscale()  
         plt.show()
 
-        return fig    
+        return plot    
         
 
-    def plot_face(self, ax, face):
+    def plot_face(self, axes, face):
         """This function plots the matrix of a certain face of the cube 
-        """
+
+        Parameters:
+            axes - Type: axes_object - Description: Is the axes object which is added to the plot which is converted in the cube image
+            face - Type: matrix - Description: Is the cube side which is going to be plotted
+            
+            """
         colorlist = ['red', 'blue', 'yellow', 'green', 'orange', 'white']
 
-        y=1-(1/self.n)
-        x=0
+        square_side_length = 1 / self.n
+
+        coordinate_y = 1 - (square_side_length)
+        coordinate_x = 0
         for row in face:
             for number in row:
-                square = patches.Rectangle((x,y),1/self.n,1/self.n, linewidth=2,edgecolor='black',facecolor=colorlist[number])
-                ax.add_patch(square)
-                x+=1/self.n
-            x-=1
-            y-=1/self.n
+                square = patches.Rectangle((coordinate_x,coordinate_y),square_side_length,square_side_length, linewidth=2,edgecolor='black',facecolor=colorlist[number])
+                axes.add_patch(square)
+                coordinate_x += square_side_length
+            coordinate_x -= 1
+            coordinate_y -= square_side_length
 
         
     def valid_movements(self):
@@ -167,7 +180,6 @@ class Cube:
                 self.left = rot90(self.left,3)
             elif axis_depth == self.n-1:
                 self.right = rot90(self.right,3)
-
 
 
     def moveD(self,*args):
@@ -261,7 +273,7 @@ class Cube:
 x= Cube('../resources/cube.json')
 #print(x.valid_movements())
 #print(x)
-
-#x.move('L2')
+x.save_img('cube1.svg')
+x.move('l2')
 #print(x.to_json("../resources/foo.json"))
-x.save_img('cube.svg')
+x.save_img('cube2.svg')
