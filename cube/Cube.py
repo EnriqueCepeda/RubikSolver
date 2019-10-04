@@ -1,7 +1,7 @@
 import json
 import hashlib
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
+from matplotlib import pyplot as plt
+from matplotlib import patches
 from numpy import array, rot90, nditer, copy, flip
 from math import sqrt
 from os import path
