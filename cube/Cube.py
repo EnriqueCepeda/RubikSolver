@@ -7,6 +7,7 @@ from math import sqrt
 from os import path
 from sys import exit
 import codecs
+from copy import deepcopy
  
 class Cube:
 
@@ -270,10 +271,3 @@ class Cube:
    
 
 
-x= Cube('../resources/cube.json')
-#print(x.valid_movements())
-#print(x)
-x.save_img('cube1.svg')
-x.move('l2')
-#print(x.to_json("../resources/foo.json"))
-x.save_img('cube2.svg')
