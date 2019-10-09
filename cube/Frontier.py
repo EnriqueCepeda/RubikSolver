@@ -1,19 +1,15 @@
 from sortedcontainers import SortedList
+import time
 
-class Frontier:
+class Frontier():
     
     def __init__(self):
         """This is the constructor of the Class Frontier.
 
         """
-          
-        self.List_TreeNodes = None
-   
-    def CreateFrontier(self):
-        """This function creates a new SortedList.
-        """
-
         self.List_TreeNodes = SortedList()
+   
+
 
     def Insert(self,TreeNode):
         """This function adds a new node to the frontier.
@@ -31,7 +27,7 @@ class Frontier:
         self.List_TreeNodes.pop(0)
 
     def isEmpty(self):
-        """[summary]
+        """This function checks if the Sort List is empty or not
         
         Returns:
             [boolean value] -- [It returns if it is empty or not]
@@ -44,5 +40,4 @@ class Frontier:
         else:
             
             return False
-
     

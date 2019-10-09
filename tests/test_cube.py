@@ -2,6 +2,7 @@ import pytest
 import os 
 from cube.Cube import Cube
 
+    
 test_file = '../resources/test.json'
 def test_valid_movements():
     """
@@ -53,3 +54,4 @@ def test_360_all_movements():
 
 def test_json_convert():
     pass
+
