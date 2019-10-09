@@ -4,7 +4,15 @@ from copy import deepcopy
 class StateSpace:
 
     @staticmethod
-    def successors(cube):
+    def successors(cube): 
+        """Return the successors list of a cube
+        
+        Arguments:
+            cube -- a cube object
+        
+        Returns:
+            list -- Formed by a 3-tuples with: the movement, the successor cube and the movement cost
+        """
         possible_successors=[]
         for movement in cube.valid_movements():
             successor_cube = deepcopy(cube)
