@@ -1,9 +1,9 @@
 import pytest
 import os 
-from cube.Cube import Cube
+from src.Cube import Cube
 
     
-test_file = '../resources/test.json'
+test_file = 'src/resources/test.json'
 def test_valid_movements():
     """
     This test checks if the list of valid movements in a 3x3x3 cube is done properly

@@ -14,7 +14,7 @@ class Cube:
     def __init__(self,json_file):
 
         try:
-            with open(path.join(json_file), 'r') as f:
+            with open(json_file, 'r') as f:
                 cube_configuration = json.load(f)
         except FileNotFoundError as e:
             print(e)
@@ -37,6 +37,14 @@ class Cube:
         """
         return str(self.back) + ' BACK \n' + str(self.down) + ' DOWN \n' + str(self.front) + ' FRONT \n' + str(self.left) + ' LEFT \n' + str(self.right) + ' RIGHT \n' + str(self.up) + ' UP \n' 
 
+    def clone(self):
+        """Clones a certain cube in the space memory
+
+        Returns:
+            cube Object
+        """
+
+        return deepcopy(self)
 
     def create_md5(self):
         """Does an md5 string with the cube configuration
@@ -151,7 +159,7 @@ class Cube:
         return [letter + str(number) for letter in ['B','b','D','d','L','l'] for number in range(0,self.n)]
 
     
-    def moveL(self,*args):
+    def __moveL(self,*args):
         """
         This function does the L and l axis moves
         """
@@ -183,7 +191,7 @@ class Cube:
                 self.right = rot90(self.right,3)
 
 
-    def moveD(self,*args):
+    def __moveD(self,*args):
         """
         This function does the D and d axis moves
         """
@@ -216,7 +224,7 @@ class Cube:
             elif axis_depth == self.n-1:
                 self.up = rot90(self.up,3)
     
-    def moveB(self,*args):
+    def __moveB(self,*args):
         """
         This function does the B and b axis moves
         """
@@ -260,14 +268,11 @@ class Cube:
         if axis_depth < self.n:
 
             if axis.lower() == 'l':
-                self.moveL(axis,axis_depth)
+                self.__moveL(axis,axis_depth)
             elif axis.lower() == 'd':
-                self.moveD(axis,axis_depth)
+                self.__moveD(axis,axis_depth)
             else:
-                self.moveB(axis,axis_depth)
+                self.__moveB(axis,axis_depth)
         else:
             print("Introduce a valid movement")
-
-   
-
 

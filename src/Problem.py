@@ -1,5 +1,5 @@
-from StateSpace import StateSpace
-from Cube import Cube
+import StateSpace
+import Cube
 from numpy import array, nditer
 
 class Problem:
@@ -45,3 +45,4 @@ class Problem:
 
         number_list.add(first_number_face)
         return True
+
