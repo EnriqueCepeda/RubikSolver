@@ -1,5 +1,6 @@
 from sortedcontainers import SortedList
 import time
+from TreeNode import TreeNode
 
 class Frontier():
     
@@ -7,7 +8,7 @@ class Frontier():
         """This is the constructor of the Class Frontier.
 
         """
-        self.List_TreeNodes = SortedList()
+        self.List_TreeNodes = SortedList(key=lambda h: h.f)
    
 
 
@@ -15,13 +16,13 @@ class Frontier():
         """This function adds a new node to the frontier.
         
         Arguments:
-            TreeNode {Object TreeNode} -- [description]
+            TreeNode {Object TreeNode} -- Once a node has been inserted, the List will be sorted depending on "f" value
         """
        
         self.List_TreeNodes.add(TreeNode)
     
     def Remove(self):
-        """It takes the first element of the frontier (lowest ”f”)and it removes it from the fringe.
+        """It takes the first element of the frontier (lowest "f")and it removes it from the fringe.
         """
         
         self.List_TreeNodes.pop(0)
@@ -40,4 +41,9 @@ class Frontier():
         else:
             
             return False
+class Coche():
+    
+    def __init__(self,alto):
+        self.alto=alto
+
     
