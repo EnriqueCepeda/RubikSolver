@@ -41,9 +41,5 @@ class Frontier():
         else:
             
             return False
-class Coche():
-    
-    def __init__(self,alto):
-        self.alto=alto
 
     
