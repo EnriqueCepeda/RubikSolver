@@ -96,7 +96,7 @@ class Cube:
         Parameters:
             name - Type: String - Desscription: Is the name of the path where the svg_file is
         """
-        self.plot_cube(name).savefig('../resources/'+name, format='svg')  
+        self.plot_cube(name).savefig('resources/'+name, format='svg')  
 
     def plot_cube(self,svg_path):
         """This function plots the matrix of the cube hiding the axes of each side of the cube

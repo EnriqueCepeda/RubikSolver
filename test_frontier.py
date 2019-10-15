@@ -1,4 +1,4 @@
-from src.Frontier import Frontier
+from src.Frontier_SortedList import Frontier_SortedList
 import time
 import os
 from src.Cube import Cube
@@ -9,7 +9,7 @@ def test_force_data_structure():
     begin_time = 0
     
     try:
-        frontier = Frontier()
+        frontier = Frontier_SortedList()
         x = Cube(test_file)
         x.move("l2")
         begin_time = time.time()
