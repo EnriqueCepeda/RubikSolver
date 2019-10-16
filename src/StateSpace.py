@@ -22,7 +22,7 @@ class StateSpace:
 
     
 
-x = Cube('../resources/cube.json')
+x = Cube('resources/cube.json')
 successor = StateSpace.successors(x)
 for element in successor:
     print(element[1].create_md5())

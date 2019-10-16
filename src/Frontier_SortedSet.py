@@ -1,5 +1,5 @@
 from sortedcontainers import SortedSet
-from TreeNode import TreeNode
+
 
 class Frontier_SortedSet():
     def __init__(self):
@@ -31,4 +31,3 @@ class Frontier_SortedSet():
         else:
             
             return False
-    

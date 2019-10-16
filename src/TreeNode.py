@@ -1,7 +1,6 @@
-from Cube import Cube
-from StateSpace import SateSpace
 import random
-class TreeNode:
+
+class TreeNode():
 
     def __init__(self,parent,state,cost,node_depth):
         
@@ -11,4 +10,4 @@ class TreeNode:
         self.node_depth = node_depth
         self.f = random.randrange(1,10000,1)
 
-    
+
