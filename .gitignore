@@ -39,4 +39,4 @@ coverage.xml
 .vscode
 
 #Project
-resources/*.svg
+src/resources/*.svg
