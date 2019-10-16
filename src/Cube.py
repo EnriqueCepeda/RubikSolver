@@ -65,7 +65,6 @@ class Cube:
             string += str(number)
         for number in nditer(self.up):
             string += str(number)
-        
         hash = hashlib.md5(string.encode())
         return hash.hexdigest()
 
@@ -276,3 +275,20 @@ class Cube:
         else:
             print("Introduce a valid movement")
 
+if __name__ == '__main__':
+    cube = Cube('resources/test_teachers.json')
+    print(cube)
+    print(cube.create_md5())
+    cube.move('l3')
+    cube.move('D1')
+    cube.move('l1')
+    cube.save_img('l1')
+    cube.move('d0')
+    cube.save_img('d0')
+    print(cube.create_md5())
+    #cube.move('B0')
+    #cube.move('b5')
+    #cube.move('l2')
+    #cube.move('d1')
+
+    print(cube.create_md5())

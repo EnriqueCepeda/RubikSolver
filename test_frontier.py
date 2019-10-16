@@ -3,6 +3,8 @@ import time
 import os
 from src.Frontier_SortedSet import Frontier_SortedSet
 from src.TreeNode import TreeNode
+from copy import deepcopy
+from src.Cube import Cube
 
 
 def test_force_sorted_list():
@@ -13,15 +15,18 @@ def test_force_sorted_list():
     
     try:
         frontier = Frontier_SortedList()
-        tree_node = TreeNode(1,2,3,4)
+        cube = Cube('src/resources/cube.json')
+        tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
         begin_time = time.time()
        
         while True:
     
-            tree_node_clone = tree_node.clone()
+            tree_node_clone = deepcopy(tree_node)
             frontier.insert(tree_node_clone)
-    except:
-        
+            
+    except MemoryError as err:
+        print(err)
+        print(len(frontier))
         end_time = time.time()
  
     total_time = end_time - begin_time
@@ -33,14 +38,17 @@ def test_force_sorted_set():
     
     try:
         frontier = Frontier_SortedSet()
-        tree_node = TreeNode(1,2,3,4)
+        cube = Cube('src/resources/cube.json')
+        tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
         begin_time = time.time()
-       
+    
         while True:
-
-            tree_node_clone = tree_node.clone()
+            tree_node_clone = deepcopy(tree_node)
             frontier.insert(tree_node_clone)
-    except:
+            
+    except MemoryError as err:
+        print(err)
+        print(len(frontier))
         end_time = time.time()
  
     total_time = end_time - begin_time
