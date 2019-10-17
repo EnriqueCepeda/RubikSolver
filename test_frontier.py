@@ -1,10 +1,12 @@
 from src.Frontier_SortedList import Frontier_SortedList
 import time
 import os
-from src.Frontier_SortedSet import Frontier_SortedSet
+from src.Frontier_blist import Frontier_blist
 from src.TreeNode import TreeNode
 from copy import deepcopy
 from src.Cube import Cube
+import os
+from psutil import virtual_memory
 
 
 def test_force_sorted_list():
@@ -13,48 +15,49 @@ def test_force_sorted_list():
 
     begin_time = 0
     
-    try:
-        frontier = Frontier_SortedList()
-        cube = Cube('src/resources/cube.json')
-        tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
-        begin_time = time.time()
-       
-        while True:
-    
-            tree_node_clone = deepcopy(tree_node)
-            frontier.insert(tree_node_clone)
-            
-    except MemoryError as err:
-        print(err)
-        print(len(frontier))
-        end_time = time.time()
- 
+    frontier = Frontier_SortedList()
+    cube = Cube('src/resources/cube.json')
+    tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
+    begin_time = time.time()
+    while True:
+
+        tree_node_clone = deepcopy(tree_node)
+        frontier.insert(tree_node_clone)
+        if(virtual_memory()[2] >= 85):
+            break
+
+    print(len(frontier))
+
+    end_time = time.time()
+
     total_time = end_time - begin_time
     print("{0:.20f}".format(total_time))
 
-def test_force_sorted_set():
+
+def test_force_blist():
 
     begin_time = 0
     
-    try:
-        frontier = Frontier_SortedSet()
-        cube = Cube('src/resources/cube.json')
-        tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
-        begin_time = time.time()
-    
-        while True:
-            tree_node_clone = deepcopy(tree_node)
-            frontier.insert(tree_node_clone)
-            
-    except MemoryError as err:
-        print(err)
-        print(len(frontier))
-        end_time = time.time()
- 
+    frontier = Frontier_blist()
+    cube = Cube('src/resources/cube.json')
+    tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
+    begin_time = time.time()
+
+    while True:
+
+        tree_node_clone = deepcopy(tree_node)
+        frontier.insert(tree_node_clone)
+        if(virtual_memory()[2] >= 85):
+            break
+
+    print(len(frontier))
+
+    end_time = time.time()
+
     total_time = end_time - begin_time
     print("{0:.20f}".format(total_time))
     
 
 if __name__ == "__main__":
-    test_force_sorted_list()
-    test_force_sorted_set()
+    #test_force_sorted_list()
+    test_force_blist()

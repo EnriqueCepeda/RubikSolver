@@ -40,3 +40,4 @@ coverage.xml
 
 #Project
 src/resources/*.svg
+resources
