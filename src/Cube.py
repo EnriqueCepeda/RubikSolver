@@ -164,7 +164,7 @@ class Cube:
         """
 
         axis = args[0]
-        axis_depth = args[1]
+        axis_depth = int(args[1])
 
         if axis.islower():
             aux_down = self.down[:,axis_depth].copy()
@@ -174,9 +174,11 @@ class Cube:
             self.front[:,axis_depth] = aux_down
 
             if axis_depth == 0:
-                self.left = rot90(self.left,1)
+                self.left = rot90(self.left, 1)
+                self.left = self.left.copy() #Necessary to update the reference of the face
             elif axis_depth == self.n-1:
-                self.right = rot90(self.right,1)
+                self.right = rot90(self.right, 1)
+                self.right = self.right.copy() #Necessary to update the reference of the face
         else:
             aux_up = self.up[:,self.n - 1 - axis_depth].copy()
             self.up[:,self.n - 1 - axis_depth] = flip(self.back[:,axis_depth])
@@ -186,8 +188,10 @@ class Cube:
 
             if axis_depth == 0:
                 self.left = rot90(self.left,3)
+                self.left = self.left.copy() #Necessary to update the reference of the face
             elif axis_depth == self.n-1:
                 self.right = rot90(self.right,3)
+                self.right = self.right.copy() #Necessary to update the reference of the face
 
 
     def __moveD(self,*args):
@@ -195,7 +199,8 @@ class Cube:
         This function does the D and d axis moves
         """
         axis = args[0]
-        axis_depth = args[1]
+        axis_depth = int(args[1])
+
         if axis.islower():
             
             aux_back = flip(self.back[self.n - 1 - axis_depth,:].copy())
@@ -207,8 +212,10 @@ class Cube:
 
             if axis_depth == 0:
                 self.down = rot90(self.down,1)
+                self.down = self.down.copy() #Necessary to update the reference of the face
             elif axis_depth == self.n-1:
                 self.up = rot90(self.up,1)
+                self.up = self.up.copy() #Necessary to update the reference of the face
         else:
 
             aux_back = self.back[self.n - 1 - axis_depth,:].copy()
@@ -220,15 +227,18 @@ class Cube:
             
             if axis_depth == 0:
                 self.down = rot90(self.down,3)
+                self.down = self.down.copy() #Necessary to update the reference of the face
             elif axis_depth == self.n-1:
                 self.up = rot90(self.up,3)
-    
+                self.up = self.up.copy() #Necessary to update the reference of the face
+
+
     def __moveB(self,*args):
         """
         This function does the B and b axis moves
         """
         axis = args[0]
-        axis_depth = args[1]
+        axis_depth = int(args[1])
 
         if axis.islower():  
 
@@ -241,8 +251,10 @@ class Cube:
 
             if axis_depth == 0:
                 self.back = rot90(self.back,1)
+                self.back = self.back.copy() #Necessary to update the reference of the face
             elif axis_depth == self.n-1:
                 self.front = rot90(self.front,1)
+                self.front = self.front.copy() #Necessary to update the reference of the face
 
         else:  
             
@@ -255,8 +267,10 @@ class Cube:
 
             if axis_depth == 0:
                 self.back = rot90(self.back,3)
+                self.back = self.back.copy() #Necessary to update the reference of the face
             elif axis_depth == self.n-1:
                 self.front = rot90(self.front,3)
+                self.front = self.front.copy() #Necessary to update the reference of the face
 
 
     def move(self, movement):
