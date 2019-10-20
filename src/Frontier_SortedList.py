@@ -8,7 +8,7 @@ class Frontier_SortedList():
         """This is the constructor of the Class Frontier. 
 
         """
-        self.list_TreeNodes = SortedList(key=lambda h: h.f)
+        self.list_TreeNodes = SortedList(key=lambda treenode: treenode.f)
    
     def insert(self,TreeNode):
         """This function adds a new TreeNode in the frontier and sort the list depending on the value of "f" in ascendent.
