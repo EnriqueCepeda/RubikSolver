@@ -21,9 +21,9 @@ class StateSpace:
         return possible_successors
 
     
-
-x = Cube('resources/cube.json')
-successor = StateSpace.successors(x)
-for element in successor:
-    print(element[1].create_md5())
+if __name__ == '__main__':
+    x = Cube('resources/cube.json')
+    successor = StateSpace.successors(x)
+    for element in successor:
+        print(element[1].create_md5())
 
