@@ -17,7 +17,7 @@ def test_force_sorted_list():
     begin_time = 0
     frontier = Frontier_SortedList()
     cube = Cube('src/resources/cube.json')
-    tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
+    tree_node = TreeNode('fkldshfñgsdl',cube,3,4,None)
     begin_time = time.time()
     while True:
         tree_node_clone = deepcopy(tree_node)
@@ -34,7 +34,7 @@ def test_force_blist():
     begin_time = 0
     frontier = Frontier_blist()
     cube = Cube('src/resources/cube.json')
-    tree_node = TreeNode('fkldshfñgsdl',cube,3,4)
+    tree_node = TreeNode('fkldshfñgsdl',cube,3,4,None)
     begin_time = time.time()
     while True:
         tree_node_clone = deepcopy(tree_node)

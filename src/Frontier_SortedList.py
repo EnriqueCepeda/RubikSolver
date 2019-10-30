@@ -20,7 +20,7 @@ class Frontier_SortedList():
         """It takes the first element of the frontier (lowest "f") and it removes it from the frontier.
         """
         
-        self.list_TreeNodes.pop(0)
+        return self.list_TreeNodes.pop(0)
 
     def is_empty(self):
         """This function checks if the Sort List is empty or not.

@@ -1,4 +1,4 @@
-from Cube import Cube
+import Cube
 from copy import deepcopy
 
 class StateSpace:
@@ -22,7 +22,7 @@ class StateSpace:
 
     
 if __name__ == '__main__':
-    x = Cube('resources/cube.json')
+    x = Cube.Cube('resources/cube.json')
     successor = StateSpace.successors(x)
     for element in successor:
         print(element[1].create_md5())

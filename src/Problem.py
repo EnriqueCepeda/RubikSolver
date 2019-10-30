@@ -1,14 +1,12 @@
-import StateSpace
 import Cube
 from numpy import array, nditer
 
 class Problem:
 
-    def __init__(self, state_space, initial_state):
-        self.stateSpace = state_space
-        self.initialState = initial_state
+    def __init__(self, initial_state):
+        self.initial_state = initial_state
 
-    def isGoal(self, state):
+    def is_goal2(self, state):
         """This function checks if a certain state of the cube is solved.
         
         Returns:
@@ -38,11 +36,24 @@ class Problem:
         Returns:
             True/False -- Boolean that represents if all the numbers of the face are equal to the first one
         """
-        first_number_face = face[0]
+        first_number_face = face[0,0]
         for number in nditer(face):
             if first_number_face != number:
                 return False
 
-        number_list.add(first_number_face)
+        number_list.append(first_number_face)
         return True
+    
+    def is_goal(self, state):
+        """This function checks if a certain state of the cube is solved. To do that, a solved cube
+        with the right dimensions is created and their md5 are compared.
+        
+        Returns:
+            True/False -- Boolean that represents if the Rubik's cube positions are in the right way
+        """
+
+        solved_cube = Cube.Cube("resources/solution.json")
+        #ffe2a82bd4117b6f1a38ee8ab383c3f0
+        return state.create_md5() == solved_cube.create_md5()
+
 
