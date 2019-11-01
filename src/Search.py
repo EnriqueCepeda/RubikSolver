@@ -50,18 +50,22 @@ class SearchStrategies():
 
     def concrete_search (self, limit):
         frontier = Frontier_SortedList.Frontier_SortedList()
-        closed = []
+        closed = {}
         initial_node = TreeNode.TreeNode(self.problem.initial_state, 0,0,None,None)
         initial_node.f = self.__f_strategy(initial_node)
         frontier.insert(initial_node)
         solution = False
         while not solution and not frontier.is_empty():
             actual_node = frontier.remove()
-            #print(actual_node.state.create_md5())
+            pruned=False
             if self.problem.is_goal(actual_node.state):
                 solution = True
-            elif actual_node.state.create_md5() not in closed and actual_node.node_depth < limit:
-                closed.insert(closed.__len__(), actual_node.state.create_md5())
+            if self.pruning:
+                if actual_node.state.create_md5() not in closed.keys():
+                    closed[actual_node.state.create_md5()] = actual_node.f
+                else:
+                    pruned = True
+            if actual_node.node_depth < limit and not pruned:
                 successors = StateSpace.StateSpace.successors(actual_node.state)
                 for successor in successors:
                     f = self.__f_strategy(actual_node) 
@@ -84,53 +88,59 @@ class SearchStrategies():
             limit += self.depth_increment
         return solution
         
-
-def ask_input():
-    print("-----INTELIGENT SYSTEMS - A1-02 PROJECT-----")
-    print("Which strategy do you want to select? (UCS, BFS, DLS, IDS): ")
-    strategy=input()
-    while strategy.upper() not in {"UCS","BFS","DLS","IDS"}:
-        print("Please, select a valid stategy. ")
+    @classmethod
+    def user_interface(self):
+        print("-----INTELIGENT SYSTEMS - A1-02 PROJECT-----")
+        print("Which strategy do you want to select? (UCS, BFS, DLS, IDS): ")
         strategy=input()
+        while strategy.upper() not in {"UCS","BFS","DLS","IDS"}:
+            print("Please, select a valid stategy.\n")
+            strategy=input()
 
-    print("Specify the limit of the strategy (An integer number greater than 0): ")
-    limit=int(input())
-    while limit <=0:
-        print("Please, select a valid limit: ")
-        limit=int(input())
+        limit= self.ask_integer("Specify the limit of the strategy (An integer number greater than 0): ", "Please, select a valid limit:\n")
 
-    if strategy.upper()=="IDS":
-        print("Select the increment fot the IDS strategy (An integer number greater than 0): ")
-        increment=int(input())
-        while increment <=0:
-            print("Please, select a valid increment. ")
-            increment=int(input())
-    else:
-        increment = 0
+        if strategy.upper()=="IDS":
+            increment= self.ask_integer("You are using IDS strategy, specify the limit (An integer number greater than 0): ","Please, select a valid increment.\n ")
+        else:
+            increment = 0
 
-    print("Select the root of the json file: ")
-    json_file_root = input()
-    while not os.path.isfile(json_file_root):
-        print("Please, select a valid json file path: ")
+        print("Select the root of the json file: ")
         json_file_root = input()
+        while not os.path.isfile(json_file_root):
+            print("Please, select a valid json file path: ")
+            json_file_root = input()
 
-    print("Do you want to do the search using the pruning technique? (Yes/No)")
-    pruning=input()
-    while pruning.upper() not in {"YES", "NO", "Y", "N"}:
-        print("Please, answer yes or no to the pruning question: ")
-        pruning = input()
+        print("Do you want to do the search using the pruning technique? (Yes/No)")
+        pruning=input()
+        while pruning.upper() not in {"YES", "NO", "Y", "N"}:
+            print("Please, answer yes or no to the pruning question: ")
+            pruning = input()
 
-    pruning_boolean = pruning.upper() in {"YES","Y"}
+        pruning_boolean = pruning.upper() in {"YES","Y"}
 
-    initial_cube = Cube(json_file_root)
-    search_object=SearchStrategies(initial_cube, strategy, limit, increment, pruning_boolean)
-    search_object.print_solution(search_object.search())
+        return strategy,limit,increment,json_file_root,pruning_boolean
+
+    @classmethod
+    def ask_integer(self,ask_sentence,askagain_sentence):
+        print(ask_sentence)
+        continuar=False
+        while continuar==False:
+            try:
+                user_input = int(input())
+                while user_input <=0:
+                    print(askagain_sentence)
+                    user_input= int(input())
+                continuar=True
+            except ValueError:
+                print(askagain_sentence)
+        return user_input
+
 
 
 if __name__ == "__main__":
-    #ask_input()
-    initial_cube = Cube("resources/cube.json")
-    search_object=SearchStrategies(initial_cube, "IDS", 2, 1, False)
+    strategy,limit,increment,json_path,pruning=SearchStrategies.user_interface()
+    initial_cube = Cube(json_path)
+    search_object=SearchStrategies(initial_cube, strategy, limit, increment, pruning)
     result = search_object.search()
     if result is not None:
         search_object.print_solution(result)

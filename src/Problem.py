@@ -52,8 +52,10 @@ class Problem:
             True/False -- Boolean that represents if the Rubik's cube positions are in the right way
         """
 
-        solved_cube = Cube.Cube("resources/solution.json")
+        #solved_cube = Cube.Cube("resources/solution.json")
         #ffe2a82bd4117b6f1a38ee8ab383c3f0
-        return state.create_md5() == solved_cube.create_md5()
+        #return state.create_md5() == solved_cube.create_md5()
+
+        return state.create_md5() == "ffe2a82bd4117b6f1a38ee8ab383c3f0"
 
 
