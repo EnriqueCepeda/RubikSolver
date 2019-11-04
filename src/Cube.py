@@ -13,11 +13,11 @@ from copy import deepcopy
 class Cube:
     def __init__(self, json_file=None, *args, **kwargs):
         """This function is the constructor of the class
-        
+
         Arguments:
             json_file -- Is the path of the json file where the cube configuration is stored (default: {None})
             kwargs -- If the method is called with a positional argument formed by 6 elements then the json file opening is omitted, and the cube is formed by those six elements
-            
+
         """
         if len(args) != 1:
             try:
@@ -36,17 +36,17 @@ class Cube:
                 self.front = array(cube_configuration["FRONT"], dtype="int8")
                 self.n = int(sqrt(self.left.size))
         else:
-            self.left = args[0][0]
-            self.right = args[0][1]
-            self.up = args[0][2]
-            self.down = args[0][3]
-            self.back = args[0][4]
-            self.front = args[0][5]
+            self.left = args[0][4]
+            self.right = args[0][5]
+            self.up = args[0][0]
+            self.down = args[0][1]
+            self.back = args[0][3]
+            self.front = args[0][2]
             self.n = int(sqrt(self.left.size))
 
     def __str__(self):
         """This function does the representation of the cube
-        
+
         Returns:
             string -- Returns the different faces of the cube
         """
@@ -76,7 +76,7 @@ class Cube:
 
     def create_md5(self):
         """Does an md5 string with the cube configuration
-        
+
         Returns:
             string -- returns the identifier of the cube state which depends of the colors combination
         """
@@ -98,7 +98,7 @@ class Cube:
 
     def to_json(self, *args):
         """Generates a json file with cube configuration
-        
+
         Arguments:
             args {
                 args[0] - string - This string tells the method where to store the json file
@@ -127,7 +127,7 @@ class Cube:
 
     def plot_cube(self, svg_path):
         """This function plots the matrix of the cube hiding the axes of each side of the cube
-        
+
         Parameters: 
             svg_path - Type: String - Description: Is the path where the svg_file is stored
         """
@@ -161,7 +161,7 @@ class Cube:
         Parameters:
             axes - Type: axes_object - Description: Is the axes object which is added to the plot which is converted in the cube image
             face - Type: matrix - Description: Is the cube side which is going to be plotted
-            
+
             """
         colorlist = ["red", "blue", "yellow", "green", "orange", "white"]
 
@@ -205,8 +205,10 @@ class Cube:
         if axis.islower():
             aux_down = self.down[:, axis_depth].copy()
             self.down[:, axis_depth] = self.back[:, axis_depth]
-            self.back[:, axis_depth] = flip(self.up[:, self.n - 1 - axis_depth])
-            self.up[:, self.n - 1 - axis_depth] = flip(self.front[:, axis_depth])
+            self.back[:, axis_depth] = flip(
+                self.up[:, self.n - 1 - axis_depth])
+            self.up[:, self.n - 1 -
+                    axis_depth] = flip(self.front[:, axis_depth])
             self.front[:, axis_depth] = aux_down
 
             if axis_depth == 0:
@@ -221,7 +223,8 @@ class Cube:
                 )  # Necessary to update the reference of the face
         else:
             aux_up = self.up[:, self.n - 1 - axis_depth].copy()
-            self.up[:, self.n - 1 - axis_depth] = flip(self.back[:, axis_depth])
+            self.up[:, self.n - 1 -
+                    axis_depth] = flip(self.back[:, axis_depth])
             self.back[:, axis_depth] = self.down[:, axis_depth]
             self.down[:, axis_depth] = self.front[:, axis_depth]
             self.front[:, axis_depth] = flip(aux_up)
@@ -248,9 +251,11 @@ class Cube:
 
             aux_back = flip(self.back[self.n - 1 - axis_depth, :].copy())
 
-            self.back[self.n - 1 - axis_depth, :] = self.right[:, axis_depth].copy()
+            self.back[self.n - 1 - axis_depth,
+                      :] = self.right[:, axis_depth].copy()
             self.right[:, axis_depth] = flip(self.front[axis_depth, :].copy())
-            self.front[axis_depth, :] = self.left[:, self.n - 1 - axis_depth].copy()
+            self.front[axis_depth, :] = self.left[:,
+                                                  self.n - 1 - axis_depth].copy()
             self.left[:, self.n - 1 - axis_depth] = aux_back
 
             if axis_depth == 0:
@@ -270,7 +275,8 @@ class Cube:
             self.back[self.n - 1 - axis_depth, :] = flip(
                 self.left[:, self.n - 1 - axis_depth].copy()
             )
-            self.left[:, self.n - 1 - axis_depth] = self.front[axis_depth, :].copy()
+            self.left[:, self.n - 1 -
+                      axis_depth] = self.front[axis_depth, :].copy()
             self.front[axis_depth, :] = flip(self.right[:, axis_depth].copy())
             self.right[:, axis_depth] = aux_back
 

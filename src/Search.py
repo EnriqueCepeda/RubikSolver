@@ -23,7 +23,7 @@ class SearchStrategies:
         elif self.strategy == "BFS":
             return 1 + node.node_depth
         elif self.strategy in {"IDS", "DFS", "DLS"}:
-            return 1 / 1 + node.node_depth
+            return 1 / (1 + node.node_depth)
 
     def solution(self, node):
         """This method creates in a stack the path solution of the problem after applying the 
@@ -46,32 +46,39 @@ class SearchStrategies:
     def concrete_search(self, limit):
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
-        initial_node = TreeNode.TreeNode(self.problem.initial_state, 0, 0, None, None)
+        initial_node = TreeNode.TreeNode(
+            self.problem.initial_state, 0, 0, None, None)
         initial_node.f = self.__f_strategy(initial_node)
         frontier.insert(initial_node)
         solution = False
         while not solution and not frontier.is_empty():
             actual_node = frontier.remove()
+            print(actual_node.state.create_md5())
+            print("actual node f: "+str(actual_node.f))
+            print("actual node depth: "+str(actual_node.node_depth))
+            print("actual node cost: "+str(actual_node.cost))
             pruned = False
             if self.problem.is_goal(actual_node.state):
                 solution = True
-            if self.pruning:
-                if actual_node.state.create_md5() not in closed.keys():
-                    closed[actual_node.state.create_md5()] = actual_node.f
-                else:
-                    pruned = True
-            if actual_node.node_depth < limit and not pruned:
-                successors = StateSpace.StateSpace.successors(actual_node.state)
-                for successor in successors:
-                    f = self.__f_strategy(actual_node)
-                    treenode = TreeNode.TreeNode(
-                        successor[1],
-                        actual_node.cost + 1,
-                        actual_node.node_depth + 1,
-                        f,
-                        actual_node,
-                    )
-                    frontier.insert(treenode)
+            else:
+                if self.pruning:
+                    if actual_node.state.create_md5() not in closed.keys():
+                        closed[actual_node.state.create_md5()] = actual_node.f
+                    else:
+                        pruned = True
+                if actual_node.node_depth < limit and not pruned:
+                    successors = StateSpace.StateSpace.successors(
+                        actual_node.state)
+                    for successor in successors:
+                        f = self.__f_strategy(actual_node)
+                        treenode = TreeNode.TreeNode(
+                            successor[1],
+                            actual_node.cost + 1,
+                            actual_node.node_depth + 1,
+                            f,
+                            actual_node,
+                        )
+                        frontier.insert(treenode)
         if solution:
             return self.solution(actual_node)
         else:
@@ -108,7 +115,7 @@ class SearchStrategies:
                 "Please, select a valid increment.\n ",
             )
         else:
-            increment = 0
+            increment = 1
 
         print("Select the root of the json file: ")
         json_file_root = input()
@@ -143,9 +150,11 @@ class SearchStrategies:
 
 
 if __name__ == "__main__":
-    strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
-    initial_cube = Cube(json_path)
-    search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+    #strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
+    #initial_cube = Cube(json_path)
+    initial_cube = Cube("src/resources/cube.json")
+    #search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+    search_object = SearchStrategies(initial_cube, "BFS", 1, 1, True)
     result = search_object.search()
     if result is not None:
         search_object.print_solution(result)
