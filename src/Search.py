@@ -26,7 +26,7 @@ class SearchStrategies:
             return -node.node_depth
 
     def solution(self, node):
-        """This method creates in a stack the path solution of the problem after applying the 
+        """This method creates in a stack the path solution of the problem after applying the
         search strategy
         """
         stack = LifoQueue()
@@ -41,54 +41,56 @@ class SearchStrategies:
         while not stack.empty():
             node = stack.get()
             node.state.plot_cube("SOLUTION: Node " + str(node.node_depth))
+            if node.last_action != None:
+                print("Next action: ", node.last_action)
             print(node.state.create_md5())
+        print("TOTAL COST: ", node.cost)
 
     def concrete_search(self, limit):
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
-        initial_node = TreeNode.TreeNode(self.problem.initial_state, 0, 0, None, None)
+        initial_node = TreeNode.TreeNode(
+            self.problem.initial_state, 0, 0, None, None, None)
         initial_node.f = self.__f_strategy(initial_node)
         frontier.insert(initial_node)
         solution = False
-        counter = 0
         while not solution and not frontier.is_empty():
-            counter += 1
-            print(counter)
             actual_node = frontier.remove()
-            print(actual_node.state.create_md5())
-            print("actual node f: " + str(actual_node.f))
-            print("actual node depth: " + str(actual_node.node_depth))
-            print("actual node cost: " + str(actual_node.cost))
             pruned = False
             if self.problem.is_goal(actual_node.state):
                 solution = True
             else:
                 if self.pruning:
-                    if actual_node.state.create_md5() not in closed.keys():
+                    pruned = self.check_node_pruning(actual_node, closed)
+                    if not pruned:
                         closed[actual_node.state.create_md5()] = actual_node.f
-                    else:
-                        if abs(actual_node.f) < abs(
-                            closed[actual_node.state.create_md5()]
-                        ):
-                            closed[actual_node.state.create_md5()] = actual_node.f
-                        else:
-                            pruned = True
-                if actual_node.node_depth < limit and not pruned:
-                    successors = StateSpace.StateSpace.successors(actual_node.state)
-                    for successor in successors:
-                        f = self.__f_strategy(actual_node)
-                        treenode = TreeNode.TreeNode(
-                            successor[1],
-                            actual_node.cost + 1,
-                            actual_node.node_depth + 1,
-                            f,
-                            actual_node,
-                        )
-                        frontier.insert(treenode)
+                if not pruned and actual_node.node_depth < limit:
+                    frontier = self.expand_node(actual_node, frontier)
         if solution:
             return self.solution(actual_node)
         else:
             return None
+
+    def expand_node(self, actual_node, frontier):
+        successors = StateSpace.StateSpace.successors(actual_node.state)
+        for successor in successors:
+            f = self.__f_strategy(actual_node)
+            treenode = TreeNode.TreeNode(
+                successor[1],
+                actual_node.cost + 1,
+                actual_node.node_depth + 1,
+                f,
+                actual_node,
+                successor[0]
+            )
+            frontier.insert(treenode)
+        return frontier
+
+    def check_node_pruning(self, actual_node, closed):
+        if actual_node.state.create_md5() not in closed.keys() or abs(actual_node.f) < abs(closed[actual_node.state.create_md5()]):
+            return False
+        else:
+            return True
 
     def search(self):
         if self.strategy == "IDS":
@@ -104,7 +106,7 @@ class SearchStrategies:
     @classmethod
     def user_interface(self):
         print("-----INTELIGENT SYSTEMS - A1-02 PROJECT-----")
-        print("Which strategy do you want to select? (UCS, BFS, DLS, IDS): ")
+        print("Which strategy do you want to select? (UCS, BFS, DLS, IDS, DFS): ")
         strategy = input().upper()
         while strategy not in {"UCS", "BFS", "DLS", "IDS", "DFS"}:
             print("Please, select a valid stategy.\n")
@@ -162,7 +164,8 @@ if __name__ == "__main__":
     strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
     initial_cube = Cube(json_path)
     # initial_cube = Cube("src/resources/cube.json")
-    search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+    search_object = SearchStrategies(
+        initial_cube, strategy, limit, increment, pruning)
     # search_object = SearchStrategies(initial_cube, "BFS", 1, 1, True)
     result = search_object.search()
     if result is not None:

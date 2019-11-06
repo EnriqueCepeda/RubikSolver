@@ -151,7 +151,7 @@ class Cube:
 
         plot.suptitle(svg_path)
         plt.autoscale()
-        plt.show()
+        plt.pause(1)
 
         return plot
 
