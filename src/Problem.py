@@ -1,4 +1,4 @@
-import Cube
+import src.Cube as Cube
 from numpy import nditer, full
 
 
@@ -8,7 +8,7 @@ class Problem:
 
     def is_goal2(self, state):
         """This function checks if a certain state of the cube is solved.
-        
+
         Returns:
             True/False -- Boolean that represents if each of the faces is diferent from each one
         """
@@ -31,7 +31,7 @@ class Problem:
 
     def __check_correctness_face(self, face, number_list):
         """This function checks the correctness of a certain face of the state(cube)
-        
+
         Returns:
             True/False -- Boolean that represents if all the numbers of the face are equal to the first one
         """
@@ -46,7 +46,7 @@ class Problem:
     def is_goal(self, state):
         """This function checks if a certain state of the cube is solved. To do that, a solved cube
         with the right dimensions is created and their md5 are compared.
-        
+
         Returns:
             True/False -- Boolean that represents if the Rubik's cube positions are in the right way
         """
@@ -63,4 +63,3 @@ if __name__ == "__main__":
     cube = Cube.Cube("src/resources/cube.json")
     problem = Problem(cube)
     print(problem.is_goal(cube))
-

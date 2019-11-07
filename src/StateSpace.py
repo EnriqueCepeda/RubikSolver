@@ -1,4 +1,4 @@
-import Cube
+import src.Cube as Cube
 from copy import deepcopy
 
 
@@ -6,10 +6,10 @@ class StateSpace:
     @staticmethod
     def successors(cube):
         """Return the successors list of a cube
-        
+
         Arguments:
             cube -- a cube object
-        
+
         Returns:
             list -- Formed by a 3-tuples with: the movement, the successor cube and the movement cost
         """
@@ -26,4 +26,3 @@ if __name__ == "__main__":
     successor = StateSpace.successors(x)
     for element in successor:
         print(element[1].create_md5())
-

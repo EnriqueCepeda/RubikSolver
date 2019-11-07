@@ -1,10 +1,11 @@
 from queue import LifoQueue
+from src.Cube import Cube
 import os
-import Problem
-import TreeNode
-import StateSpace
-import Cube
-import Frontier_SortedList
+import src.Frontier_SortedList as Frontier_SortedList
+import src.Problem as Problem
+import src.TreeNode as TreeNode
+import src.StateSpace as StateSpace
+
 
 class SearchStrategies:
     def __init__(self, initial_state, strategy, max_depth, depth_increment, pruning):
@@ -185,12 +186,12 @@ if __name__ == "__main__":
     strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
     initial_cube = Cube(json_path)
     # initial_cube = Cube("src/resources/cube.json")
-    search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+    search_object = SearchStrategies(
+        initial_cube, strategy, limit, increment, pruning)
     # search_object = SearchStrategies(initial_cube, "BFS", 1, 1, True)
     result = search_object.search()
     if result is not None:
         list_result = search_object.print_solution(result)
         search_object.output_solution(list_result)
-            
     else:
         print("No solution was found")
