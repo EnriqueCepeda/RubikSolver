@@ -1,3 +1,7 @@
+import os
+import sys
+if "src" in os.getcwd():
+    sys.path.insert(0, os.getcwd() + "../..")
 import src.Cube as Cube
 from numpy import nditer, full
 

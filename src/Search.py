@@ -1,10 +1,20 @@
 from queue import LifoQueue
-from src.Cube import Cube
+import os
+import sys
+if "src" in os.getcwd():
+    sys.path.insert(0, os.getcwd() + "../..")
+
+#from src.Cube import Cube
+import src.Cube as Cube
 import os
 import src.Frontier_SortedList as Frontier_SortedList
 import src.Problem as Problem
 import src.TreeNode as TreeNode
 import src.StateSpace as StateSpace
+#import src.Frontier_SortedList as Frontier_SortedList
+#import src.Problem as Problem
+#import src.TreeNode as TreeNode
+#import src.StateSpace as StateSpace
 
 
 class SearchStrategies:
@@ -184,7 +194,7 @@ class SearchStrategies:
 
 if __name__ == "__main__":
     strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
-    initial_cube = Cube(json_path)
+    initial_cube = Cube.Cube(json_path)
     # initial_cube = Cube("src/resources/cube.json")
     search_object = SearchStrategies(
         initial_cube, strategy, limit, increment, pruning)

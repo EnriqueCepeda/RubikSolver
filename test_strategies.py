@@ -15,22 +15,38 @@ def test_pruning():
         treenode, closed)
     assert pruned
 
-
-def test_BFS():
-    pass
-
-
-def test_DFS():
-    pass
-
-
 def test_UCS():
-    pass
-
+    initial_cube = Cube.Cube(test_file)
+    search_UCS = SearchStrategies.SearchStrategies(
+        initial_cube, "UCS", 2, 1, True)
+    result = search_UCS.search()
+    while not result.empty():
+        node = result.get()
+    assert node.node_depth == 2
+    
+def test_DLS():
+    initial_cube = Cube.Cube(test_file)
+    search_UCS = SearchStrategies.SearchStrategies(
+        initial_cube, "DLS", 2, 1, True)
+    result = search_UCS.search()
+    while not result.empty():
+        node = result.get()
+    assert node.node_depth == 2
 
 def test_IDS():
-    pass
+    initial_cube = Cube.Cube(test_file)
 
+    search_IDS = SearchStrategies.SearchStrategies(
+        initial_cube, "IDS", 10, 1, True)
+    solution_IDS = search_IDS.search()
+    while solution_IDS.not_empty:
+        node = solution_IDS.get()
+    IDS_solution_depth = node.node_depth
+    search_BFS = SearchStrategies.SearchStrategies(
+        initial_cube, "BFS", 10, 1, True)
+    solution_BFS = search_BFS.search()
+    while solution_BFS.not_empty:
+        node = solution_BFS.get()
+    BFS_solution_depth = node.node_depth
 
-def test_DLS():
-    pass
+    assert IDS_solution_depth == BFS_solution_depth
