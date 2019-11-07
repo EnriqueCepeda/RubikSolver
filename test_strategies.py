@@ -1,7 +1,7 @@
 import pytest
-from src.TreeNode import TreeNode
 from src.Search import SearchStrategies
-
+from src.Cube import Cube
+import src.TreeNode as TreeNode
 
 def test_pruning():
     cube = Cube("test.json")

@@ -1,11 +1,10 @@
 from queue import LifoQueue
-from Cube import Cube
 import os
-import Frontier_SortedList
 import Problem
 import TreeNode
 import StateSpace
-
+import Cube
+import Frontier_SortedList
 
 class SearchStrategies:
     def __init__(self, initial_state, strategy, max_depth, depth_increment, pruning):
@@ -36,22 +35,22 @@ class SearchStrategies:
         stack.put(node)
         return stack
 
-    def output_solution(self, stack):
+    def output_solution(self, list_solution):
         with open("resources/solution.out", "w") as file:
             file.write("Strategy: " + str(self.strategy))
-            file.write("Max Depth: " + str(self.max_depth))
-            file.write("Depth Increment: " + str(self.depth_increment))
-            file.write("Pruning: " + str(self.pruning))
-            file.write("---SOLUTION---: ")
-            while not stack.empty():
-                node = stack.get()
-                file.write("SOLUTION: Node " + str(node.node_depth))
+            file.write("\n Max Depth: " + str(self.max_depth))
+            file.write("\n Depth Increment: " + str(self.depth_increment))
+            file.write("\n Pruning: " + str(self.pruning))
+            file.write("\n ---SOLUTION---: ")
+            for node in list_solution:
+                file.write("\n Depth: " + str(node.node_depth))
                 if node.last_action != None:
-                    file.write("Next action: " + str(node.last_action))
-                file.write(str(node.state.create_md5()))
-            file.write("TOTAL COST: " + str(node.cost))
+                    file.write("\n Next action: " + str(node.last_action))
+                file.write("\n Node:"+str(node.state.create_md5()))
+            file.write("\n TOTAL COST: " + str(node.cost))
 
     def print_solution(self, stack):
+        list_solution = []
         print("---SOLUTION---: ")
         while not stack.empty():
             node = stack.get()
@@ -59,7 +58,9 @@ class SearchStrategies:
             if node.last_action != None:
                 print("Next action: ", node.last_action)
             print(node.state.create_md5())
+            list_solution.append(node)
         print("TOTAL COST: ", node.cost)
+        return list_solution
 
     def concrete_search(self, limit):
         frontier = Frontier_SortedList.Frontier_SortedList()
@@ -188,9 +189,8 @@ if __name__ == "__main__":
     # search_object = SearchStrategies(initial_cube, "BFS", 1, 1, True)
     result = search_object.search()
     if result is not None:
-        # search_object.print_solution(result)
-        search_object.output_solution(result)
-        print(result)
-
+        list_result = search_object.print_solution(result)
+        search_object.output_solution(list_result)
+            
     else:
         print("No solution was found")
