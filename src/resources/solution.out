@@ -1,22 +1,28 @@
 Strategy: UCS
  Max Depth: 6
  Depth Increment: 1
- Pruning: True
+ Pruning: False
  ---SOLUTION---: 
+ ID: 0
  Depth: 0
  Node:2d933fbd33229a28f6133b83b1b35130
+ ID: 4
  Depth: 1
  Next action: b1
  Node:dc6c53d2c9f294028c56dda58b7bed0a
+ ID: 57
  Depth: 2
  Next action: L0
  Node:23f7c3ce4197735f866135cf153a5bb3
+ ID: 696
  Depth: 3
  Next action: l1
  Node:dc1410db2600d4d7ac0c473bacb205d1
+ ID: 8354
  Depth: 4
  Next action: B1
  Node:de8712207052ad4dec8e65b08c2107d1
+ ID: 100250
  Depth: 5
  Next action: B1
  Node:6902d012fdab0a926eac8a76b9f93c7a

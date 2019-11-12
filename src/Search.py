@@ -1,3 +1,8 @@
+import src.StateSpace as StateSpace
+import src.TreeNode as TreeNode
+import src.Problem as Problem
+import src.Frontier_SortedList as Frontier_SortedList
+import src.Cube as Cube
 from queue import LifoQueue
 import os
 import sys
@@ -5,12 +10,6 @@ if "src" in os.getcwd():
     sys.path.insert(0, os.getcwd() + "../..")
 
 #from src.Cube import Cube
-import src.Cube as Cube
-import os
-import src.Frontier_SortedList as Frontier_SortedList
-import src.Problem as Problem
-import src.TreeNode as TreeNode
-import src.StateSpace as StateSpace
 #import src.Frontier_SortedList as Frontier_SortedList
 #import src.Problem as Problem
 #import src.TreeNode as TreeNode
@@ -54,6 +53,7 @@ class SearchStrategies:
             file.write("\n Pruning: " + str(self.pruning))
             file.write("\n ---SOLUTION---: ")
             for node in list_solution:
+                file.write("\n ID: " + str(node.id))
                 file.write("\n Depth: " + str(node.node_depth))
                 if node.last_action != None:
                     file.write("\n Next action: " + str(node.last_action))
@@ -65,10 +65,11 @@ class SearchStrategies:
         print("---SOLUTION---: ")
         while not stack.empty():
             node = stack.get()
-            node.state.plot_cube("SOLUTION: Node " + str(node.node_depth))
+            node.state.plot_cube(
+                "SOLUTION: Node [" + str(node.id)+"] at depth "+str(node.node_depth))
             if node.last_action != None:
                 print("Next action: ", node.last_action)
-            print(node.state.create_md5())
+            print("["+str(node.id)+"] "+str(node.state.create_md5()))
             list_solution.append(node)
         print("TOTAL COST: ", node.cost)
         return list_solution
@@ -77,10 +78,10 @@ class SearchStrategies:
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
         initial_node = TreeNode.TreeNode(
-            self.problem.initial_state, 0, 0, None, None, None
-        )
+            0, self.problem.initial_state, 0, 0, None, None, None)
         initial_node.f = self.__f_strategy(initial_node)
         frontier.insert(initial_node)
+        id = 1
         solution = False
         while not solution and not frontier.is_empty():
             actual_node = frontier.remove()
@@ -94,7 +95,8 @@ class SearchStrategies:
                         closed[actual_node.state.create_md5()] = actual_node.f
                 if not pruned and actual_node.node_depth < limit:
                     f = self.__f_strategy(actual_node)
-                    frontier = self.expand_node(actual_node, frontier, f)
+                    frontier, id = self.expand_node(
+                        id, actual_node, frontier, f)
         if solution:
             return self.solution(actual_node)
         else:
@@ -112,10 +114,11 @@ class SearchStrategies:
         return solution
 
     @classmethod
-    def expand_node(self, actual_node, frontier, f_strategy):
+    def expand_node(self, id, actual_node, frontier, f_strategy):
         successors = StateSpace.StateSpace.successors(actual_node.state)
         for successor in successors:
             treenode = TreeNode.TreeNode(
+                id,
                 successor[1],
                 actual_node.cost + 1,
                 actual_node.node_depth + 1,
@@ -124,7 +127,8 @@ class SearchStrategies:
                 successor[0],
             )
             frontier.insert(treenode)
-        return frontier
+            id += 1
+        return frontier, id
 
     @classmethod
     def check_node_pruning(self, actual_node, closed):
