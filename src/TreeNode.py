@@ -7,4 +7,3 @@ class TreeNode:
         self.f = f
         self.parent = parent
         self.last_action = last_action
-

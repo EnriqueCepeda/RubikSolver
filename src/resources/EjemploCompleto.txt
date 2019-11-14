@@ -1,0 +1,50 @@
+Problema:
+
+{"BACK": [[1,1],[0,0]],"DOWN": [[3,2],[4,5]],"FRONT": [[0,1],[0,1]],"LEFT": [[4,5],[3,2]],"RIGHT": [[4,5],[3,2]],"UP": [[3,2],[4,5]]}
+
+Soluciones: (Profundidad máxia de 6)
+Prepresentación del nodo del árbol: [ID_Nodo]([accion] ID_ESTADO,costo,profundidad,valor del nodo (f)) 
+A
+==
+[0]([None]2d933fbd33229a28f6133b83b1b35130,c=0,p=0,h=3.87,v=3.87)
+[3]([b0]3738b536b078d9c8038988d9a8571973,c=1,p=1,h=2.32,v=3.32)
+[41]([D0]65ea20ab50a2eaef3db6ea85fb7e5a5a,c=2,p=2,h=3.09,v=5.09)
+[644]([d1]8bea69c555ff9ddd8f9dd3d7c7c90f0b,c=3,p=3,h=1.55,v=4.55)
+[661]([B0]f90464bdc55bd5e8111dc2b52eaea794,c=4,p=4,h=1.55,v=5.55)
+[1597]([B0]91b788d5565df3def0d775110527845c,c=5,p=5,h=0.00,v=5.00)
+
+Breadth (anchura)
+=======
+[0]([None]2d933fbd33229a28f6133b83b1b35130,c=0,p=0,h=3.87,v=0.00)
+[3]([b0]3738b536b078d9c8038988d9a8571973,c=1,p=1,h=2.32,v=1.00)
+[41]([D0]65ea20ab50a2eaef3db6ea85fb7e5a5a,c=2,p=2,h=3.09,v=2.00)
+[440]([d1]8bea69c555ff9ddd8f9dd3d7c7c90f0b,c=3,p=3,h=1.55,v=3.00)
+[4057]([B0]f90464bdc55bd5e8111dc2b52eaea794,c=4,p=4,h=1.55,v=4.00)
+[37849]([B0]91b788d5565df3def0d775110527845c,c=5,p=5,h=0.00,v=5.00)
+
+Depth (Profundidad máxima de 6)
+===============================
+[0]([None]2d933fbd33229a28f6133b83b1b35130,c=0,p=0,h=3.87,v=1.00)
+[3]([b0]3738b536b078d9c8038988d9a8571973,c=1,p=1,h=2.32,v=0.50)
+[229853]([D0]65ea20ab50a2eaef3db6ea85fb7e5a5a,c=2,p=2,h=3.09,v=0.33)
+[239336]([d1]8bea69c555ff9ddd8f9dd3d7c7c90f0b,c=3,p=3,h=1.55,v=0.25)
+[246529]([B0]f90464bdc55bd5e8111dc2b52eaea794,c=4,p=4,h=1.55,v=0.20)
+[246541]([B0]91b788d5565df3def0d775110527845c,c=5,p=5,h=0.00,v=0.17)
+
+Greedy (Voraz)
+==============
+[0]([None]2d933fbd33229a28f6133b83b1b35130,c=0,p=0,h=3.87,v=3.87)
+[3]([b0]3738b536b078d9c8038988d9a8571973,c=1,p=1,h=2.32,v=2.32)
+[41]([D0]65ea20ab50a2eaef3db6ea85fb7e5a5a,c=2,p=2,h=3.09,v=3.09)
+[4064]([d1]8bea69c555ff9ddd8f9dd3d7c7c90f0b,c=3,p=3,h=1.55,v=1.55)
+[4081]([B0]f90464bdc55bd5e8111dc2b52eaea794,c=4,p=4,h=1.55,v=1.55)
+[4189]([B0]91b788d5565df3def0d775110527845c,c=5,p=5,h=0.00,v=0.00)
+
+Uniform (Uniforme)
+==================
+[0]([None]2d933fbd33229a28f6133b83b1b35130,c=0,p=0,h=3.87,v=0.00)
+[3]([b0]3738b536b078d9c8038988d9a8571973,c=1,p=1,h=2.32,v=1.00)
+[41]([D0]65ea20ab50a2eaef3db6ea85fb7e5a5a,c=2,p=2,h=3.09,v=2.00)
+[440]([d1]8bea69c555ff9ddd8f9dd3d7c7c90f0b,c=3,p=3,h=1.55,v=3.00)
+[4057]([B0]f90464bdc55bd5e8111dc2b52eaea794,c=4,p=4,h=1.55,v=4.00)
+[37849]([B0]91b788d5565df3def0d775110527845c,c=5,p=5,h=0.00,v=5.00)

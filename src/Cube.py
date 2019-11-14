@@ -206,8 +206,10 @@ class Cube:
         if axis.islower():
             aux_down = self.down[:, axis_depth].copy()
             self.down[:, axis_depth] = self.back[:, axis_depth]
-            self.back[:, axis_depth] = flip(self.up[:, self.n - 1 - axis_depth])
-            self.up[:, self.n - 1 - axis_depth] = flip(self.front[:, axis_depth])
+            self.back[:, axis_depth] = flip(
+                self.up[:, self.n - 1 - axis_depth])
+            self.up[:, self.n - 1 -
+                    axis_depth] = flip(self.front[:, axis_depth])
             self.front[:, axis_depth] = aux_down
 
             if axis_depth == 0:
@@ -222,7 +224,8 @@ class Cube:
                 )  # Necessary to update the reference of the face
         else:
             aux_up = self.up[:, self.n - 1 - axis_depth].copy()
-            self.up[:, self.n - 1 - axis_depth] = flip(self.back[:, axis_depth])
+            self.up[:, self.n - 1 -
+                    axis_depth] = flip(self.back[:, axis_depth])
             self.back[:, axis_depth] = self.down[:, axis_depth]
             self.down[:, axis_depth] = self.front[:, axis_depth]
             self.front[:, axis_depth] = flip(aux_up)
@@ -249,9 +252,11 @@ class Cube:
 
             aux_back = flip(self.back[self.n - 1 - axis_depth, :].copy())
 
-            self.back[self.n - 1 - axis_depth, :] = self.right[:, axis_depth].copy()
+            self.back[self.n - 1 - axis_depth,
+                      :] = self.right[:, axis_depth].copy()
             self.right[:, axis_depth] = flip(self.front[axis_depth, :].copy())
-            self.front[axis_depth, :] = self.left[:, self.n - 1 - axis_depth].copy()
+            self.front[axis_depth, :] = self.left[:,
+                                                  self.n - 1 - axis_depth].copy()
             self.left[:, self.n - 1 - axis_depth] = aux_back
 
             if axis_depth == 0:
@@ -271,7 +276,8 @@ class Cube:
             self.back[self.n - 1 - axis_depth, :] = flip(
                 self.left[:, self.n - 1 - axis_depth].copy()
             )
-            self.left[:, self.n - 1 - axis_depth] = self.front[axis_depth, :].copy()
+            self.left[:, self.n - 1 -
+                      axis_depth] = self.front[axis_depth, :].copy()
             self.front[axis_depth, :] = flip(self.right[:, axis_depth].copy())
             self.right[:, axis_depth] = aux_back
 
@@ -352,7 +358,8 @@ class Cube:
     def entropy(self):
         entropy = 0
         counter = []
-        faces = [self.left, self.right, self.up, self.down, self.back, self.front]
+        faces = [self.left, self.right, self.up,
+                 self.down, self.back, self.front]
 
         for face in faces:
             face_entropy = 0
@@ -363,17 +370,12 @@ class Cube:
                     face_entropy = face_entropy + counter[number] / face.size * log(
                         counter[number] / (face.size), 6
                     )
-            if face_entropy == 0 or face_entropy == -1:
-                face_entropy = -face_entropy
-            entropy += face_entropy
+            entropy += abs(face_entropy)
 
-        return entropy
-
-
+        return round(entropy, 2)
 
 
 if __name__ == "__main__":
-    x = Cube("src/resources/cube.json")
+    x = Cube("resources/heuristic_example.json")
     print(x.entropy())
-    x.plot_cube("prueba")
-
+    x.plot_cube("heuristic_example")
