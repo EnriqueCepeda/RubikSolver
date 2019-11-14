@@ -1,7 +1,11 @@
 import os
 import sys
-if "src" in os.getcwd():
-    sys.path.insert(0, os.getcwd() + "../..")
+
+
+ruta = os.getcwd()
+if "src" in ruta:
+    sys.path.insert(0, ruta[: len(ruta) - 4])
+
 import src.Cube as Cube
 from numpy import nditer, full
 
@@ -64,6 +68,6 @@ class Problem:
 
 
 if __name__ == "__main__":
-    cube = Cube.Cube("src/resources/cube.json")
+    cube = Cube.Cube("resources/cube.json")
     problem = Problem(cube)
     print(problem.is_goal(cube))

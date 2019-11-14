@@ -1,7 +1,10 @@
 import os
 import sys
-if "src" in os.getcwd():
-    sys.path.insert(0, os.getcwd() + "../..")
+
+ruta = os.getcwd()
+if "src" in ruta:
+    sys.path.insert(0, ruta[: len(ruta) - 4])
+
 import src.Cube as Cube
 from copy import deepcopy
 

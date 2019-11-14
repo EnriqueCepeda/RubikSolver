@@ -1,19 +1,16 @@
+import os
+import sys
+
+ruta = os.getcwd()
+if "src" in ruta:
+    sys.path.insert(0, ruta[: len(ruta) - 4])
+
 import src.StateSpace as StateSpace
 import src.TreeNode as TreeNode
 import src.Problem as Problem
 import src.Frontier_SortedList as Frontier_SortedList
 import src.Cube as Cube
 from queue import LifoQueue
-import os
-import sys
-if "src" in os.getcwd():
-    sys.path.insert(0, os.getcwd() + "../..")
-
-#from src.Cube import Cube
-#import src.Frontier_SortedList as Frontier_SortedList
-#import src.Problem as Problem
-#import src.TreeNode as TreeNode
-#import src.StateSpace as StateSpace
 
 
 class SearchStrategies:
@@ -33,6 +30,10 @@ class SearchStrategies:
             return 1 + node.node_depth
         elif self.strategy in {"IDS", "DLS"}:
             return -node.node_depth
+        elif self.strategy == "GREEDY":
+            return node.state.entropy()
+        elif self.strategy == "A*":
+            return node.state.entropy() + node.cost
 
     def solution(self, node):
         """This method creates in a stack the path solution of the problem after applying the
@@ -57,7 +58,7 @@ class SearchStrategies:
                 file.write("\n Depth: " + str(node.node_depth))
                 if node.last_action != None:
                     file.write("\n Next action: " + str(node.last_action))
-                file.write("\n Node:"+str(node.state.create_md5()))
+                file.write("\n Node:" + str(node.state.create_md5()))
             file.write("\n TOTAL COST: " + str(node.cost))
 
     def print_solution(self, stack):
@@ -66,10 +67,11 @@ class SearchStrategies:
         while not stack.empty():
             node = stack.get()
             node.state.plot_cube(
-                "SOLUTION: Node [" + str(node.id)+"] at depth "+str(node.node_depth))
+                "SOLUTION: Node [" + str(node.id) + "] at depth " + str(node.node_depth)
+            )
             if node.last_action != None:
                 print("Next action: ", node.last_action)
-            print("["+str(node.id)+"] "+str(node.state.create_md5()))
+            print("[" + str(node.id) + "] " + str(node.state.create_md5()))
             list_solution.append(node)
         print("TOTAL COST: ", node.cost)
         return list_solution
@@ -78,7 +80,8 @@ class SearchStrategies:
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
         initial_node = TreeNode.TreeNode(
-            0, self.problem.initial_state, 0, 0, None, None, None)
+            0, self.problem.initial_state, 0, 0, None, None, None
+        )
         initial_node.f = self.__f_strategy(initial_node)
         frontier.insert(initial_node)
         id = 1
@@ -95,8 +98,7 @@ class SearchStrategies:
                         closed[actual_node.state.create_md5()] = actual_node.f
                 if not pruned and actual_node.node_depth < limit:
                     f = self.__f_strategy(actual_node)
-                    frontier, id = self.expand_node(
-                        id, actual_node, frontier, f)
+                    frontier, id = self.expand_node(id, actual_node, frontier, f)
         if solution:
             return self.solution(actual_node)
         else:
@@ -142,9 +144,11 @@ class SearchStrategies:
     @classmethod
     def user_interface(self):
         print("-----INTELIGENT SYSTEMS - A1-02 PROJECT-----")
-        print("Which strategy do you want to select? (UCS, BFS, DLS, IDS, DFS): ")
+        print(
+            "Which strategy do you want to select? (UCS, BFS, DLS, IDS, DFS, GREEDY, A*): "
+        )
         strategy = input().upper()
-        while strategy not in {"UCS", "BFS", "DLS", "IDS", "DFS"}:
+        while strategy not in {"UCS", "BFS", "DLS", "IDS", "DFS", "GREEDY", "A*"}:
             print("Please, select a valid stategy.\n")
             strategy = input().upper()
         if strategy == "DFS":
@@ -200,8 +204,7 @@ if __name__ == "__main__":
     strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
     initial_cube = Cube.Cube(json_path)
     # initial_cube = Cube("src/resources/cube.json")
-    search_object = SearchStrategies(
-        initial_cube, strategy, limit, increment, pruning)
+    search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
     # search_object = SearchStrategies(initial_cube, "BFS", 1, 1, True)
     result = search_object.search()
     if result is not None:
