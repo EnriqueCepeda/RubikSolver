@@ -372,7 +372,7 @@ class Cube:
                     )
             entropy += abs(face_entropy)
 
-        return round(entropy, 2)
+        return entropy
 
 
 if __name__ == "__main__":

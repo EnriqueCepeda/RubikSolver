@@ -1,4 +1,4 @@
-Strategy: GREEDY
+Strategy: DLS
  Max Depth: 6
  Depth Increment: 1
  Pruning: True
@@ -7,55 +7,47 @@ Strategy: GREEDY
  ID: 0
  Cost: 0
  Depth: 0
- Heuristic: 4.64
- F value: 4.64
- Node:3b607235dbfa8a63ec664280d84c56af
+ Heuristic: 3.868528072345416
+ F value: 0
+ Node:2d933fbd33229a28f6133b83b1b35130
 
- ID: 7
- Action: D0
+ ID: 3
+ Action: b0
  Cost: 1
  Depth: 1
- Heuristic: 4.22
- F value: 4.22
- Node:15510725f69ac2abd72bfd7955f53b20
+ Heuristic: 2.3211168434072493
+ F value: -1
+ Node:3738b536b078d9c8038988d9a8571973
 
- ID: 11471
- Action: b1
+ ID: 233969
+ Action: D0
  Cost: 2
  Depth: 2
- Heuristic: 3.4
- F value: 3.4
- Node:8d43ad2830ce202e91f910045c135817
+ Heuristic: 3.0948224578763326
+ F value: -2
+ Node:65ea20ab50a2eaef3db6ea85fb7e5a5a
 
- ID: 11487
- Action: B2
+ ID: 243452
+ Action: d1
  Cost: 3
  Depth: 3
- Heuristic: 3.58
- F value: 3.58
- Node:59ccd17008d25308b222ba747762f7a9
+ Heuristic: 1.5474112289381663
+ F value: -3
+ Node:8bea69c555ff9ddd8f9dd3d7c7c90f0b
 
- ID: 12041
- Action: l1
+ ID: 250609
+ Action: B0
  Cost: 4
  Depth: 4
- Heuristic: 2.84
- F value: 2.84
- Node:04115f24217e15d8a1c968f41f575978
+ Heuristic: 1.5474112289381663
+ F value: -4
+ Node:f90464bdc55bd5e8111dc2b52eaea794
 
- ID: 12121
- Action: D0
+ ID: 250621
+ Action: B0
  Cost: 5
  Depth: 5
- Heuristic: 1.42
- F value: 1.42
- Node:85955eabfe96c2423f3704c825063957
-
- ID: 12138
- Action: b2
- Cost: 6
- Depth: 6
  Heuristic: 0.0
- F value: 0.0
- Node:ffe2a82bd4117b6f1a38ee8ab383c3f0
- TOTAL COST: 6
+ F value: -5
+ Node:91b788d5565df3def0d775110527845c
+ TOTAL COST: 5

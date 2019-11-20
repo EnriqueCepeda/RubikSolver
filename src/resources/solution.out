@@ -1,5 +1,5 @@
 Strategy: GREEDY
- Max Depth: 6
+ Max Depth: 7
  Depth Increment: 1
  Pruning: True
  ---SOLUTION---: 
@@ -19,7 +19,7 @@ Strategy: GREEDY
  F value: 4.22
  Node:15510725f69ac2abd72bfd7955f53b20
 
- ID: 11471
+ ID: 56417
  Action: b1
  Cost: 2
  Depth: 2
@@ -27,7 +27,7 @@ Strategy: GREEDY
  F value: 3.4
  Node:8d43ad2830ce202e91f910045c135817
 
- ID: 11487
+ ID: 56433
  Action: B2
  Cost: 3
  Depth: 3
@@ -35,7 +35,7 @@ Strategy: GREEDY
  F value: 3.58
  Node:59ccd17008d25308b222ba747762f7a9
 
- ID: 12041
+ ID: 58031
  Action: l1
  Cost: 4
  Depth: 4
@@ -43,7 +43,7 @@ Strategy: GREEDY
  F value: 2.84
  Node:04115f24217e15d8a1c968f41f575978
 
- ID: 12121
+ ID: 58327
  Action: D0
  Cost: 5
  Depth: 5
@@ -51,7 +51,7 @@ Strategy: GREEDY
  F value: 1.42
  Node:85955eabfe96c2423f3704c825063957
 
- ID: 12138
+ ID: 58344
  Action: b2
  Cost: 6
  Depth: 6

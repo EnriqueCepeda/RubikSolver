@@ -28,7 +28,7 @@ class SearchStrategies:
         elif self.strategy == "BFS":
             return node.node_depth
         elif self.strategy in {"IDS", "DLS"}:
-            return -node.node_depth
+            return 1/(1 + node.node_depth)
         elif self.strategy == "GREEDY":
             return node.state.entropy()
         elif self.strategy == "A*":
@@ -83,10 +83,9 @@ class SearchStrategies:
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
         initial_node = TreeNode.TreeNode(
-            0, self.problem.initial_state, 0, 0, None, None, None
+            id=0, state=self.problem.initial_state, cost=0, node_depth=0, f=None, parent=None, last_action=None
         )
         initial_node.f = self.__f_strategy(initial_node)
-        # print(initial_node.state.create_md5())
         frontier.insert(initial_node)
         id = 1
         solution = False
@@ -114,7 +113,7 @@ class SearchStrategies:
         else:
             limit = self.max_depth
         solution = None
-        while solution == None and limit <= self.max_depth:
+        while solution is None and limit <= self.max_depth:
             solution = self.concrete_search(limit)
             limit += self.depth_increment
         return solution
@@ -123,26 +122,23 @@ class SearchStrategies:
         successors = StateSpace.StateSpace.successors(actual_node.state)
         for successor in successors:
             treenode = TreeNode.TreeNode(
-                id,
-                successor[1],
-                actual_node.cost + 1,
-                actual_node.node_depth + 1,
-                actual_node.f,  # this will be changed in the next operation
-                actual_node,
-                successor[0],
+                id=id,
+                state=successor[1],
+                cost=actual_node.cost + 1,
+                node_depth=actual_node.node_depth + 1,
+                f=actual_node.f,  # this will be changed in the next operation
+                parent=actual_node,
+                last_action=successor[0],
             )
             treenode.f = self.__f_strategy(treenode)
-            # if treenode.state.create_md5() == "3b607235dbfa8a63ec664280d84c56af":
-            # print(str(treenode.id))
             frontier.insert(treenode)
             id += 1
         return frontier, id
 
     @classmethod
     def check_node_pruning(self, actual_node, closed):
-        if actual_node.state.create_md5() not in closed.keys() or abs(
-            actual_node.f
-        ) < abs(closed[actual_node.state.create_md5()]):
+        actual_md5 = actual_node.state.create_md5()
+        if (actual_md5 not in closed) or (abs(actual_node.f) < abs(closed[actual_md5])):
             return False
         else:
             return True
@@ -208,12 +204,11 @@ class SearchStrategies:
 
 if __name__ == "__main__":
     try:
-        strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
-        initial_cube = Cube.Cube(json_path)
-        # initial_cube = Cube("src/resources/cube.json")
-        search_object = SearchStrategies(
-            initial_cube, strategy, limit, increment, pruning)
-        # search_object = SearchStrategies(initial_cube, "BFS", 1, 1, True)
+        #strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
+        #initial_cube = Cube.Cube(json_path)
+        initial_cube = Cube.Cube("src/resources/ejemplo_2x2.json")
+        #search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+        search_object = SearchStrategies(initial_cube, "IDS", 6, 1, True)
         result = search_object.search()
         if result is not None:
             list_result = search_object.print_solution(result)
