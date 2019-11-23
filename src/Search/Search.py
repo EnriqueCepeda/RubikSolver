@@ -1,15 +1,11 @@
 from queue import LifoQueue
-import src.Cube as Cube
-import src.Frontier_SortedList as Frontier_SortedList
-import src.Problem as Problem
-import src.TreeNode as TreeNode
-import src.StateSpace as StateSpace
 import os
 import sys
-
-ruta = os.getcwd()
-if "src" in ruta:
-    sys.path.insert(0, ruta[: len(ruta) - 4])
+from src.Cube import Cube as Cube
+import src.Search.Frontier_SortedList as Frontier_SortedList
+import src.Search.Problem as Problem
+import src.Search.TreeNode as TreeNode
+import src.Search.StateSpace as StateSpace
 
 
 class SearchStrategies:
@@ -28,7 +24,7 @@ class SearchStrategies:
         elif self.strategy == "BFS":
             return node.node_depth
         elif self.strategy in {"IDS", "DLS"}:
-            return 1/(1 + node.node_depth)
+            return 1 / (1 + node.node_depth)
         elif self.strategy == "GREEDY":
             return node.state.entropy()
         elif self.strategy == "A*":
@@ -46,7 +42,7 @@ class SearchStrategies:
         return stack
 
     def output_solution(self, list_solution):
-        with open("resources/solution.out", "w") as file:
+        with open("src/resources/solution.out", "w") as file:
             file.write("Strategy: " + str(self.strategy))
             file.write("\n Max Depth: " + str(self.max_depth))
             file.write("\n Depth Increment: " + str(self.depth_increment))
@@ -58,8 +54,8 @@ class SearchStrategies:
                     file.write("\n Action: " + str(node.last_action))
                 file.write("\n Cost: " + str(node.cost))
                 file.write("\n Depth: " + str(node.node_depth))
-                file.write("\n Heuristic: "+str(node.state.entropy()))
-                file.write("\n F value: "+str(node.f))
+                file.write("\n Heuristic: " + str(node.state.entropy()))
+                file.write("\n F value: " + str(node.f))
                 file.write("\n Node:" + str(node.state.create_md5()))
             file.write("\n TOTAL COST: " + str(node.cost))
 
@@ -69,8 +65,7 @@ class SearchStrategies:
         while not stack.empty():
             node = stack.get()
             node.state.plot_cube(
-                "SOLUTION: Node [" + str(node.id) +
-                "] at depth " + str(node.node_depth)
+                "SOLUTION: Node [" + str(node.id) + "] at depth " + str(node.node_depth)
             )
             if node.last_action != None:
                 print("Next action: ", node.last_action)
@@ -83,7 +78,13 @@ class SearchStrategies:
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
         initial_node = TreeNode.TreeNode(
-            id=0, state=self.problem.initial_state, cost=0, node_depth=0, f=None, parent=None, last_action=None
+            id=0,
+            state=self.problem.initial_state,
+            cost=0,
+            node_depth=0,
+            f=None,
+            parent=None,
+            last_action=None,
         )
         initial_node.f = self.__f_strategy(initial_node)
         frontier.insert(initial_node)
@@ -100,8 +101,7 @@ class SearchStrategies:
                     if not pruned:
                         closed[actual_node.state.create_md5()] = actual_node.f
                 if not pruned and actual_node.node_depth < limit:
-                    frontier, id = self.expand_node(
-                        id, actual_node, frontier)
+                    frontier, id = self.expand_node(id, actual_node, frontier)
         if solution:
             return self.solution(actual_node)
         else:
@@ -204,10 +204,10 @@ class SearchStrategies:
 
 if __name__ == "__main__":
     try:
-        #strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
-        #initial_cube = Cube.Cube(json_path)
+        # strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
+        # initial_cube = Cube.Cube(json_path)
         initial_cube = Cube.Cube("src/resources/ejemplo_2x2.json")
-        #search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+        # search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
         search_object = SearchStrategies(initial_cube, "IDS", 6, 1, True)
         result = search_object.search()
         if result is not None:

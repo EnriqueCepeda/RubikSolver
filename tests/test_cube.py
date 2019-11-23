@@ -1,9 +1,9 @@
 import pytest
 import os
-import src.Cube as Cube
+from src.Cube import Cube as Cube
 
 
-test_file = 'src/resources/test.json'
+test_file = "src/resources/test.json"
 
 
 def test_valid_movements():
@@ -12,8 +12,26 @@ def test_valid_movements():
     """
     x = Cube.Cube(test_file)
     if x.n == 3:
-        assert x.valid_movements() == ['B0', 'B1', 'B2', 'b0', 'b1', 'b2', 'D0',
-                                       'D1', 'D2', 'd0', 'd1', 'd2', 'L0', 'L1', 'L2', 'l0', 'l1', 'l2']
+        assert x.valid_movements() == [
+            "B0",
+            "B1",
+            "B2",
+            "b0",
+            "b1",
+            "b2",
+            "D0",
+            "D1",
+            "D2",
+            "d0",
+            "d1",
+            "d2",
+            "L0",
+            "L1",
+            "L2",
+            "l0",
+            "l1",
+            "l2",
+        ]
 
 
 def test_b0_B0():
@@ -23,10 +41,10 @@ def test_b0_B0():
     x = Cube.Cube(test_file)
     initial_md5 = x.create_md5()
 
-    x.move('B0')
+    x.move("B0")
     assert x.create_md5() != initial_md5
 
-    x.move('b0')
+    x.move("b0")
     assert x.create_md5() == initial_md5
 
 
@@ -39,7 +57,7 @@ def test_360():
     initial_md5 = x.create_md5()
 
     for i in range(4):
-        x.move('D2')
+        x.move("D2")
 
     assert x.create_md5() == initial_md5
 

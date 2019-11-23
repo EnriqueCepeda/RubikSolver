@@ -1,12 +1,5 @@
 from numpy import nditer, full
-import src.Cube as Cube
-import os
-import sys
-
-
-ruta = os.getcwd()
-if "src" in ruta:
-    sys.path.insert(0, ruta[: len(ruta) - 4])
+import src.Cube.Cube as Cube
 
 
 class Problem:
@@ -64,6 +57,6 @@ class Problem:
 
 
 if __name__ == "__main__":
-    cube = Cube.Cube("resources/cube.json")
+    cube = Cube.Cube("src/resources/cube.json")
     problem = Problem(cube)
     print(problem.is_goal(cube))

@@ -1,11 +1,4 @@
-import os
-import sys
-
-ruta = os.getcwd()
-if "src" in ruta:
-    sys.path.insert(0, ruta[: len(ruta) - 4])
-
-import src.Cube as Cube
+import src.Cube.Cube as Cube
 from copy import deepcopy
 
 

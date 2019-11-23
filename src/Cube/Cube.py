@@ -376,6 +376,6 @@ class Cube:
 
 
 if __name__ == "__main__":
-    x = Cube("resources/heuristic_example.json")
+    x = Cube("src/resources/heuristic_example.json")
     print(x.entropy())
     x.plot_cube("heuristic_example")
