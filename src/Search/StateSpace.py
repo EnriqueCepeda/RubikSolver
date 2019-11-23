@@ -1,4 +1,4 @@
-import src.Cube.Cube as Cube
+from src.Cube import Cube
 from copy import deepcopy
 
 

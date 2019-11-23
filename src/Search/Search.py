@@ -2,10 +2,10 @@ from queue import LifoQueue
 import os
 import sys
 from src.Cube import Cube as Cube
-import src.Search.Frontier_SortedList as Frontier_SortedList
-import src.Search.Problem as Problem
-import src.Search.TreeNode as TreeNode
-import src.Search.StateSpace as StateSpace
+from src.Search import Frontier_SortedList 
+from src.Search import Problem 
+from src.Search import TreeNode 
+from src.Search import StateSpace
 
 
 class SearchStrategies:
@@ -24,7 +24,7 @@ class SearchStrategies:
         elif self.strategy == "BFS":
             return node.node_depth
         elif self.strategy in {"IDS", "DLS"}:
-            return 1 / (1 + node.node_depth)
+            return -node.node_depth
         elif self.strategy == "GREEDY":
             return node.state.entropy()
         elif self.strategy == "A*":
@@ -208,7 +208,7 @@ if __name__ == "__main__":
         # initial_cube = Cube.Cube(json_path)
         initial_cube = Cube.Cube("src/resources/ejemplo_2x2.json")
         # search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
-        search_object = SearchStrategies(initial_cube, "IDS", 6, 1, True)
+        search_object = SearchStrategies(initial_cube, "UCS", 6, 1, True)
         result = search_object.search()
         if result is not None:
             list_result = search_object.print_solution(result)

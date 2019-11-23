@@ -1,5 +1,5 @@
 from numpy import nditer, full
-import src.Cube.Cube as Cube
+from src.Cube import Cube
 
 
 class Problem:
