@@ -2,9 +2,9 @@ from queue import LifoQueue
 import os
 import sys
 from src.Cube import Cube as Cube
-from src.Search import Frontier_SortedList 
-from src.Search import Problem 
-from src.Search import TreeNode 
+from src.Search import Frontier_SortedList
+from src.Search import Problem
+from src.Search import TreeNode
 from src.Search import StateSpace
 
 
@@ -77,6 +77,7 @@ class SearchStrategies:
     def concrete_search(self, limit):
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
+        list_nodes = []
         initial_node = TreeNode.TreeNode(
             id=0,
             state=self.problem.initial_state,
@@ -96,12 +97,29 @@ class SearchStrategies:
             if self.problem.is_goal(actual_node.state):
                 solution = True
             else:
-                if self.pruning:
-                    pruned = self.check_node_pruning(actual_node, closed)
+                if self.pruning == 1:
+                    pruned = self.check_node_pruning1(actual_node, closed)
                     if not pruned:
                         closed[actual_node.state.create_md5()] = actual_node.f
-                if not pruned and actual_node.node_depth < limit:
-                    frontier, id = self.expand_node(id, actual_node, frontier)
+
+                if self.pruning in [0, 1]:
+                    if not pruned:
+                        if actual_node.node_depth < limit:
+                            frontier, id = self.expand_node(id, actual_node, frontier)
+
+                if self.pruning == 2:
+                    if actual_node.node_depth < limit:
+                        list_nodes, id = self.expand_node2(id, actual_node, list_nodes)
+                        for node in list_nodes:
+                            md5 = node.state.create_md5()
+                            if md5 not in closed:
+                                closed[md5] = node.f
+                                frontier.insert(node)
+                            elif md5 in closed:
+                                if closed[md5] > node.f:
+                                    closed[md5] = node.f
+                                    frontier.insert(node)
+                        list_nodes.clear()
         if solution:
             return self.solution(actual_node)
         else:
@@ -135,8 +153,25 @@ class SearchStrategies:
             id += 1
         return frontier, id
 
+    def expand_node2(self, id, actual_node, node_list):
+        successors = StateSpace.StateSpace.successors(actual_node.state)
+        for successor in successors:
+            treenode = TreeNode.TreeNode(
+                id=id,
+                state=successor[1],
+                cost=actual_node.cost + 1,
+                node_depth=actual_node.node_depth + 1,
+                f=actual_node.f,  # this will be changed in the next operation
+                parent=actual_node,
+                last_action=successor[0],
+            )
+            treenode.f = self.__f_strategy(treenode)
+            node_list.append(treenode)
+            id += 1
+        return node_list, id
+
     @classmethod
-    def check_node_pruning(self, actual_node, closed):
+    def check_node_pruning1(self, actual_node, closed):
         actual_md5 = actual_node.state.create_md5()
         if (actual_md5 not in closed) or (abs(actual_node.f) < abs(closed[actual_md5])):
             return False
@@ -208,7 +243,7 @@ if __name__ == "__main__":
         # initial_cube = Cube.Cube(json_path)
         initial_cube = Cube.Cube("src/resources/ejemplo_2x2.json")
         # search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
-        search_object = SearchStrategies(initial_cube, "UCS", 6, 1, True)
+        search_object = SearchStrategies(initial_cube, "DLS", 6, 1, 1)
         result = search_object.search()
         if result is not None:
             list_result = search_object.print_solution(result)
