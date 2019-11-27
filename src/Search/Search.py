@@ -186,7 +186,7 @@ class SearchStrategies:
         )
         strategy = input().upper()
         while strategy not in {"UCS", "BFS", "DLS", "IDS", "DFS", "GREEDY", "A*"}:
-            print("Please, select a valid stategy.\n")
+            print("Please, select a valid stategy.")
             strategy = input().upper()
         if strategy == "DFS":
             limit = 10000
@@ -194,13 +194,13 @@ class SearchStrategies:
         else:
             limit = self.ask_integer(
                 "Specify the limit of the strategy (An integer number greater than 0): ",
-                "Please, select a valid limit:\n",
+                "Please, select a valid limit:",
             )
 
         if strategy == "IDS":
             increment = self.ask_integer(
                 "You are using IDS strategy, specify the limit (An integer number greater than 0): ",
-                "Please, select a valid increment.\n ",
+                "Please, select a valid increment. ",
             )
         else:
             increment = 1
@@ -211,15 +211,10 @@ class SearchStrategies:
             print("Please, select a valid json file path: ")
             json_file_root = input()
 
-        print("Do you want to do the search using the pruning technique? (Yes/No)")
-        pruning = input().upper()
-        while pruning not in {"YES", "NO", "Y", "N"}:
-            print("Please, answer yes or no to the pruning question: ")
-            pruning = input().upper()
+        pruning = self.ask_pruning("Do you want to do the search using any pruning technique? (0,1,2): ",
+                                   "Please, answer any of these numbers:(0,1,2) to the pruning question: ")
 
-        pruning_boolean = pruning in {"YES", "Y"}
-
-        return strategy, limit, increment, json_file_root, pruning_boolean
+        return strategy, limit, increment, json_file_root, pruning
 
     @classmethod
     def ask_integer(self, ask_sentence, askagain_sentence):
@@ -236,15 +231,29 @@ class SearchStrategies:
                 print(askagain_sentence)
         return user_input
 
+    @classmethod
+    def ask_pruning(self, ask_sentence, askagain_sentence):
+        print(ask_sentence)
+        continuar = False
+        while continuar == False:
+            try:
+                user_input = int(input())
+                while user_input not in [0, 1, 2]:
+                    print(askagain_sentence)
+                    user_input = int(input())
+                continuar = True
+            except ValueError:
+                print(askagain_sentence)
+        return user_input
+
 
 if __name__ == "__main__":
     try:
-        # strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
-        # initial_cube = Cube.Cube(json_path)
-        initial_cube = Cube.Cube("src/resources/ejemplo_2x2.json")
-        # search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+        strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
+        initial_cube = Cube.Cube(json_path)
+        search_object = SearchStrategies(
+            initial_cube, strategy, limit, increment, pruning)
         initial_time = time.time_ns()
-        search_object = SearchStrategies(initial_cube, "DLS", 6, 1, 1)
         result = search_object.search()
         final_time = time.time_ns()
         if result is not None:
