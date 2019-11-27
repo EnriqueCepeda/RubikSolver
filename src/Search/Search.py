@@ -6,6 +6,7 @@ from src.Search import Frontier_SortedList
 from src.Search import Problem
 from src.Search import TreeNode
 from src.Search import StateSpace
+import time
 
 
 class SearchStrategies:
@@ -65,7 +66,8 @@ class SearchStrategies:
         while not stack.empty():
             node = stack.get()
             node.state.plot_cube(
-                "SOLUTION: Node [" + str(node.id) + "] at depth " + str(node.node_depth)
+                "SOLUTION: Node [" + str(node.id) +
+                "] at depth " + str(node.node_depth)
             )
             if node.last_action != None:
                 print("Next action: ", node.last_action)
@@ -77,7 +79,6 @@ class SearchStrategies:
     def concrete_search(self, limit):
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
-        list_nodes = []
         initial_node = TreeNode.TreeNode(
             id=0,
             state=self.problem.initial_state,
@@ -88,8 +89,8 @@ class SearchStrategies:
             last_action=None,
         )
         initial_node.f = self.__f_strategy(initial_node)
-        frontier.insert(initial_node)
         id = 1
+        frontier.insert(initial_node)
         solution = False
         while not solution and not frontier.is_empty():
             actual_node = frontier.remove()
@@ -100,26 +101,24 @@ class SearchStrategies:
                 if self.pruning == 1:
                     pruned = self.check_node_pruning1(actual_node, closed)
                     if not pruned:
-                        closed[actual_node.state.create_md5()] = actual_node.f
+                        closed[actual_node.state.create_md5()] = abs(
+                            actual_node.f)
 
                 if self.pruning in [0, 1]:
                     if not pruned:
                         if actual_node.node_depth < limit:
-                            frontier, id = self.expand_node(id, actual_node, frontier)
+                            frontier, id = self.expand_node(
+                                id, actual_node, frontier)
 
                 if self.pruning == 2:
                     if actual_node.node_depth < limit:
-                        list_nodes, id = self.expand_node2(id, actual_node, list_nodes)
+                        list_nodes, id = self.expand_node2(
+                            id, actual_node)
                         for node in list_nodes:
                             md5 = node.state.create_md5()
-                            if md5 not in closed:
-                                closed[md5] = node.f
+                            if md5 not in closed or closed[md5] > abs(node.f):
+                                closed[md5] = abs(node.f)
                                 frontier.insert(node)
-                            elif md5 in closed:
-                                if closed[md5] > node.f:
-                                    closed[md5] = node.f
-                                    frontier.insert(node)
-                        list_nodes.clear()
         if solution:
             return self.solution(actual_node)
         else:
@@ -153,7 +152,8 @@ class SearchStrategies:
             id += 1
         return frontier, id
 
-    def expand_node2(self, id, actual_node, node_list):
+    def expand_node2(self, id, actual_node):
+        node_list = []
         successors = StateSpace.StateSpace.successors(actual_node.state)
         for successor in successors:
             treenode = TreeNode.TreeNode(
@@ -173,7 +173,7 @@ class SearchStrategies:
     @classmethod
     def check_node_pruning1(self, actual_node, closed):
         actual_md5 = actual_node.state.create_md5()
-        if (actual_md5 not in closed) or (abs(actual_node.f) < abs(closed[actual_md5])):
+        if (actual_md5 not in closed) or (abs(actual_node.f) < closed[actual_md5]):
             return False
         else:
             return True
@@ -243,11 +243,15 @@ if __name__ == "__main__":
         # initial_cube = Cube.Cube(json_path)
         initial_cube = Cube.Cube("src/resources/ejemplo_2x2.json")
         # search_object = SearchStrategies(initial_cube, strategy, limit, increment, pruning)
+        initial_time = time.time_ns()
         search_object = SearchStrategies(initial_cube, "DLS", 6, 1, 1)
         result = search_object.search()
+        final_time = time.time_ns()
         if result is not None:
             list_result = search_object.print_solution(result)
             search_object.output_solution(list_result)
+            print("Time searching: " +
+                  str((final_time-initial_time)/1000000000)+" s")
         else:
             print("No solution was found")
     except KeyboardInterrupt as kb:
