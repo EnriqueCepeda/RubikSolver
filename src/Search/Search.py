@@ -31,52 +31,89 @@ class SearchStrategies:
         elif self.strategy == "A*":
             return node.state.entropy() + node.cost
 
-    def solution(self, node):
-        """This method creates in a stack the path solution of the problem after applying the
-        search strategy
+    def solution(self, solution_node):
         """
-        stack = LifoQueue()
-        while node.parent != None:
-            stack.put(node)
-            node = node.parent
-        stack.put(node)
-        return stack
+        This method stores the path solution in a list, working as a lifo queue.
+        Extracts the solution from the solution node, from the first to the last
+        """
+        solution_path = []
+        while solution_node.parent != None:
+            solution_path.append(solution_node)
+            solution_node = solution_node.parent
+        solution_path.append(solution_node)
+        return solution_path[::-1]
 
-    def output_solution(self, list_solution):
-        with open("src/resources/solution.out", "w") as file:
-            file.write("Strategy: " + str(self.strategy))
-            file.write("\n Max Depth: " + str(self.max_depth))
-            file.write("\n Depth Increment: " + str(self.depth_increment))
-            file.write("\n Pruning: " + str(self.pruning))
-            file.write("\n ---SOLUTION---: ")
-            for node in list_solution:
-                file.write("\n\n ID: " + str(node.id))
+    def save_solution(self, solution_path, file_path):
+        """
+        This function outputs the solution to a file (filepath) by means of the argument list_solution
+        Arguments:
+            list_solution {List} -- contains the solution node path from first to last
+            file_path {String} -- contains the file_path were the solution is saved
+        """
+        node_info = ""
+        with open(file_path, "w") as file:
+            file.write(
+                "Strategy: "
+                + str(self.strategy)
+                + "\n Max Depth: "
+                + str(self.max_depth)
+                + "\n Depth Increment: "
+                + str(self.depth_increment)
+                + "\n Pruning: "
+                + str(self.pruning)
+                + "\n ---SOLUTION---: "
+            )
+            for node in solution_path:
+                node_info = "\n\n ID: " + str(node.id)
                 if node.last_action != None:
-                    file.write("\n Action: " + str(node.last_action))
-                file.write("\n Cost: " + str(node.cost))
-                file.write("\n Depth: " + str(node.node_depth))
-                file.write("\n Heuristic: " + str(node.state.entropy()))
-                file.write("\n F value: " + str(node.f))
-                file.write("\n Node:" + str(node.state.create_md5()))
-            file.write("\n TOTAL COST: " + str(node.cost))
+                    node_info += "\n Action: " + str(node.last_action)
+                node_info += (
+                    "\n Cost: "
+                    + str(node.cost)
+                    + "\n Depth: "
+                    + str(node.node_depth)
+                    + "\n Heuristic: "
+                    + str(node.state.entropy())
+                    + "\n F value: "
+                    + str(node.f)
+                    + "\n Node: "
+                    + str(node.state.create_md5())
+                )
+                file.write(node_info)
+                node_info = ""
 
-    def print_solution(self, stack):
-        list_solution = []
+            file.write(
+                "\n TOTAL COST: " + str(solution_path[len(solution_path) - 1].cost)
+            )
+
+    def print_solution(self, solution_path):
+        """
+        Outputs the solution by the terminal and also draws in the screen the states composing the solution
+        
+        Arguments:
+            solution_path {List} -- contains the path of nodes of the solution from the first to the last
+        """
         print("---SOLUTION---: ")
-        while not stack.empty():
-            node = stack.get()
+        for node in solution_path:
             node.state.plot_cube(
-                "SOLUTION: Node [" + str(node.id) +
-                "] at depth " + str(node.node_depth)
+                "SOLUTION: Node [" + str(node.id) + "] at depth " + str(node.node_depth)
             )
             if node.last_action != None:
                 print("Next action: ", node.last_action)
             print("[" + str(node.id) + "] " + str(node.state.create_md5()))
-            list_solution.append(node)
-        print("TOTAL COST: ", node.cost)
-        return list_solution
+
+        print("\n TOTAL COST: ", solution_path[len(solution_path) - 1].cost)
 
     def concrete_search(self, limit):
+        """ This method does executes the search algorithm for all the strategies
+        
+        Arguments:
+            limit {Integer} -- Is the maximum limit of the tree, if the depth is higher than
+                               the limit, it prunes that node
+        
+        Returns:
+            List or None -- Returns a list if the cube has a result, else returns None
+        """
         frontier = Frontier_SortedList.Frontier_SortedList()
         closed = {}
         initial_node = TreeNode.TreeNode(
@@ -99,21 +136,18 @@ class SearchStrategies:
                 solution = True
             else:
                 if self.pruning == 1:
-                    pruned = self.check_node_pruning1(actual_node, closed)
+                    pruned = self.check_node_pruning_1st_prune(actual_node, closed)
                     if not pruned:
-                        closed[actual_node.state.create_md5()] = abs(
-                            actual_node.f)
+                        closed[actual_node.state.create_md5()] = abs(actual_node.f)
 
                 if self.pruning in [0, 1]:
                     if not pruned:
                         if actual_node.node_depth < limit:
-                            frontier, id = self.expand_node(
-                                id, actual_node, frontier)
+                            frontier, id = self.expand_node(id, actual_node, frontier)
 
                 if self.pruning == 2:
                     if actual_node.node_depth < limit:
-                        list_nodes, id = self.expand_node2(
-                            id, actual_node)
+                        list_nodes, id = self.expand_node_2nd_prune(id, actual_node)
                         for node in list_nodes:
                             md5 = node.state.create_md5()
                             if md5 not in closed or closed[md5] > abs(node.f):
@@ -152,7 +186,7 @@ class SearchStrategies:
             id += 1
         return frontier, id
 
-    def expand_node2(self, id, actual_node):
+    def expand_node_2nd_prune(self, id, actual_node):
         node_list = []
         successors = StateSpace.StateSpace.successors(actual_node.state)
         for successor in successors:
@@ -171,7 +205,7 @@ class SearchStrategies:
         return node_list, id
 
     @classmethod
-    def check_node_pruning1(self, actual_node, closed):
+    def check_node_pruning_1st_prune(self, actual_node, closed):
         actual_md5 = actual_node.state.create_md5()
         if (actual_md5 not in closed) or (abs(actual_node.f) < closed[actual_md5]):
             return False
@@ -211,8 +245,10 @@ class SearchStrategies:
             print("Please, select a valid json file path: ")
             json_file_root = input()
 
-        pruning = self.ask_pruning("Do you want to do the search using any pruning technique? (0,1,2): ",
-                                   "Please, answer any of these numbers:(0,1,2) to the pruning question: ")
+        pruning = self.ask_pruning(
+            "Do you want to do the search using any pruning technique? (0,1,2): ",
+            "Please, answer any of these numbers:(0,1,2) to the pruning question: ",
+        )
 
         return strategy, limit, increment, json_file_root, pruning
 
@@ -252,15 +288,19 @@ if __name__ == "__main__":
         strategy, limit, increment, json_path, pruning = SearchStrategies.user_interface()
         initial_cube = Cube.Cube(json_path)
         search_object = SearchStrategies(
-            initial_cube, strategy, limit, increment, pruning)
+            initial_cube, strategy, limit, increment, pruning
+        )
         initial_time = time.time_ns()
         result = search_object.search()
         final_time = time.time_ns()
         if result is not None:
-            list_result = search_object.print_solution(result)
-            search_object.output_solution(list_result)
-            print("Time searching: " +
-                  str((final_time-initial_time)/1000000000)+" s")
+            search_object.print_solution(result)
+            search_object.save_solution(result, "src/resources/solution.out")
+            print(
+                "Time searching: "
+                + str((final_time - initial_time) / 1000000000)
+                + " s"
+            )
         else:
             print("No solution was found")
     except KeyboardInterrupt as kb:
