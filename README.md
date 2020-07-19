@@ -1,5 +1,5 @@
 # Rubik cube solver
-This projects tries to solve a rubik's cube using different graph search strategies:
+This projects solve a rubik's cube using different graph search strategies:
 
 * Depth First Search
 * Breadth First Search 
