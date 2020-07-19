@@ -1,5 +1,18 @@
-# A1-02
-Intelligent systems practices
+# Rubik cube solver
+This projects tries to solve a rubik's cube using different graph search strategies:
+
+* Depth First Search
+* Breadth First Search 
+* Depth Limited Search
+* Uniform Cost Search
+* Greedy
+* A* Search
+
+The project show how efficient are the different search strategies and how those strategies can improve using heuristics.
+
+For simplicity, an entropy measure is used as the heuristic. It favours those cube configurations near a solved cube.
+
+Json format is used to represent a cube.
 
 ## Execution instructions
 First clone the git repository to your machine and then execute this command in terminal: 
@@ -22,3 +35,5 @@ _sudo apt-get install python3-tk_
 Elena Hervás Martín
 Enrique Cepeda Villamayor
 Sergio Jimenez Del Coso
+
+Project done for Intelligent systems practices.
