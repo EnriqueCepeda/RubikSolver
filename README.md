@@ -1,5 +1,5 @@
 # Rubik cube solver
-This projects solve a rubik's cube using different graph search strategies:
+This project solve a rubik's cube using different graph search strategies:
 
 * Depth First Search
 * Breadth First Search 
@@ -12,7 +12,7 @@ The project show how efficient are the different search strategies and how those
 
 For simplicity, an entropy measure is used as the heuristic. It favours those cube configurations near a solved cube.
 
-Json format is used to represent a cube.
+JSON format is used to represent a cube.
 
 ## Execution instructions
 First clone the git repository to your machine and then execute this command in terminal: 
